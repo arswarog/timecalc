@@ -6,7 +6,7 @@ function App() {
     return (
         <>
             <SiteTitle />
-            <CalculatorUI display={{ value: 'Hello world!' }} />
+            <CalculatorUI display={{ code: '6д + 2:00', result: '6д 2ч 12м' }} />
         </>
     );
 }

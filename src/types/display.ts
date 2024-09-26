@@ -1,3 +1,4 @@
 export interface IDisplayData {
-    value: string;
+    code: string;
+    result: string;
 }

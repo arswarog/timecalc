@@ -1,4 +1,4 @@
-import { IDisplayData } from '../types/display.ts';
+import { IDisplayData } from '../types';
 
 import styles from './Display.module.scss';
 import block from 'bem-css-modules';
@@ -10,6 +10,11 @@ export interface IDisplayProps {
 }
 
 export function Display({ data }: IDisplayProps) {
-    const { value } = data;
-    return <div className={b()}>{value}</div>;
+    const { code, result } = data;
+    return (
+        <div className={b()}>
+            <div className={b('code')}>{code}</div>
+            <div className={b('result')}>{result}</div>
+        </div>
+    );
 }
