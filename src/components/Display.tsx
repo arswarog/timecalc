@@ -13,7 +13,10 @@ export function Display({ data }: IDisplayProps) {
     const { code, result } = data;
     return (
         <div className={b()}>
-            <div className={b('code')}>{code}</div>
+            <input
+                className={b('code')}
+                defaultValue={code}
+            />
             <div className={b('result')}>{result}</div>
         </div>
     );
