@@ -1,13 +1,6 @@
 .Keyboard {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 1px;
-    grid-template-areas:
-        'plus minus multiply divide'
-        'symbol7 symbol8 symbol9 clear'
-        'symbol4 symbol5 symbol6 enter'
-        'symbol1 symbol2 symbol3 enter'
-        'symbol0 symbol0 symbolDot enter';
 
     &__button {
         background-color: #f5f5f5;
