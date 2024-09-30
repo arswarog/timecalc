@@ -6,16 +6,23 @@ import { Keyboard } from './Keyboard.tsx';
 
 export interface ICalculatorUIProps {
     display: IDisplayData;
-    onClick?: (value: ButtonCode) => void;
+    onChange?: (code: string) => void;
 }
 
 const b = block(styles, 'CalculatorUI');
 
-export function CalculatorUI({ display, onClick }: ICalculatorUIProps) {
+export function CalculatorUI({ display, onChange }: ICalculatorUIProps) {
+    const handleClick = (value: ButtonCode) => {
+        console.log('Clicked:', value);
+    };
+
     return (
         <div className={b()}>
-            <Display data={display} />
-            <Keyboard onClick={onClick} />
+            <Display
+                data={display}
+                onChange={onChange}
+            />
+            <Keyboard onClick={handleClick} />
         </div>
     );
 }

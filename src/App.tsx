@@ -1,12 +1,17 @@
 import './App.css';
 import { SiteTitle } from './components/SiteTitle.tsx';
 import { CalculatorUI } from './components/CalculatorUI.tsx';
+import { useCalc } from './hooks/useCalc.ts';
 
 function App() {
+    const { display, onChange } = useCalc();
     return (
         <>
             <SiteTitle />
-            <CalculatorUI display={{ code: '6д + 2:00', result: '6д 2ч 12м' }} />
+            <CalculatorUI
+                display={display}
+                onChange={onChange}
+            />
         </>
     );
 }
