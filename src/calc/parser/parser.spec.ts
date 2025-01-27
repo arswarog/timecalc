@@ -117,5 +117,13 @@ describe('Parser', () => {
             // Act & Assert
             expect(() => parse(tokens, source)).toThrowError(/Expected value, got "d"/);
         });
+        it('failed: unexpected token', () => {
+            // Arrange
+            const source = '12+35d';
+            const tokens = analyzeCode(source);
+
+            // Act & Assert
+            expect(() => parse(tokens, source)).toThrowError(/Unexpected token: "d"/);
+        });
     });
 });
