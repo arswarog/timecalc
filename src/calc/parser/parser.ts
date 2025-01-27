@@ -31,7 +31,7 @@ function createContext(tokens: Token[]): Context {
     };
 }
 
-function parseBinaryExpression(ctx: Context): BinaryExpressionNode | ValueNode {
+function parseBinaryExpression(ctx: Context, precedence = 0): BinaryExpressionNode | ValueNode {
     let left = parseValue(ctx);
 
     while (!ctx.isEnd()) {
@@ -41,9 +41,12 @@ function parseBinaryExpression(ctx: Context): BinaryExpressionNode | ValueNode {
             break;
         }
 
+        const operatorPrecedence = getPrecedence(operator);
+        if (operatorPrecedence < precedence) break;
+
         ctx.next();
 
-        const right = parseValue(ctx);
+        const right = parseBinaryExpression(ctx, operatorPrecedence + 1);
 
         left = new BinaryExpressionNode(operator, left, right);
     }
@@ -60,4 +63,21 @@ function parseValue(ctx: Context): BinaryExpressionNode | ValueNode {
     }
 
     throw new Error(`Expected value, got "${value.text}"`);
+}
+
+function getPrecedence(operator: Token): number {
+    if (operator.type !== TokenType.Operation) {
+        throw new Error(`Expected operator, got "${operator.text}"`);
+    }
+
+    switch (operator.text) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        default:
+            return 0;
+    }
 }
