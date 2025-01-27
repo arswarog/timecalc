@@ -7,7 +7,13 @@ export function parse(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    return new RootNode(parseBinaryExpression(ctx), source);
+    const root = new RootNode(parseBinaryExpression(ctx), source);
+
+    if (!ctx.isEnd()) {
+        throw new Error(`Unexpected token: "${ctx.getCurrentToken().text}"`);
+    }
+
+    return root;
 }
 
 interface Context {
