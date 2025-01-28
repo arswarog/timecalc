@@ -1,7 +1,11 @@
-import { Token, TokenType } from '../lexer';
+import { analyzeCode, Token, TokenType } from '../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../nodes';
 
-export function parse(tokens: Token[], source: string): RootNode {
+export function parse(source: string): RootNode {
+    return parseTokens(analyzeCode(source), source);
+}
+
+export function parseTokens(tokens: Token[], source: string): RootNode {
     // так как дальше мы будем мутировать массив токенов, клонируем его
     tokens = [...tokens];
 

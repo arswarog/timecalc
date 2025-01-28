@@ -1,18 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeCode, TokenType } from '../lexer';
-import { parse } from './parser';
-import { BinaryExpressionNode, RootNode, ValueNode } from '../nodes';
-import { createToken } from '../lexer/create-token.ts';
+import { analyzeCode, TokenType } from '../../lexer';
+import { parse } from '../parser';
+import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
+import { createToken } from '../../lexer';
 
 describe('Parser', () => {
     describe('common', () => {
         it('12', () => {
             // Arrange
             const source = '12';
-            const tokens = analyzeCode(source);
 
             // Act
-            const ast = parse(tokens, source);
+            const ast = parse(source);
 
             // Assert
             expect(ast).toEqual(new RootNode(new ValueNode('12'), source));
@@ -20,10 +19,9 @@ describe('Parser', () => {
         it('12+34', () => {
             // Arrange
             const source = '12+34';
-            const tokens = analyzeCode(source);
 
             // Act
-            const ast = parse(tokens, source);
+            const ast = parse(source);
 
             // Assert
             expect(ast).toEqual(
@@ -40,10 +38,9 @@ describe('Parser', () => {
         it('12-5+34', () => {
             // Arrange
             const source = '12-5+34';
-            const tokens = analyzeCode(source);
 
             // Act
-            const ast = parse(tokens, source);
+            const ast = parse(source);
 
             // Assert
             expect(ast).toEqual(
@@ -64,10 +61,9 @@ describe('Parser', () => {
         it('12*5+34', () => {
             // Arrange
             const source = '12*5+34';
-            const tokens = analyzeCode(source);
 
             // Act
-            const ast = parse(tokens, source);
+            const ast = parse(source);
 
             // Assert
             expect(ast).toEqual(
@@ -88,10 +84,9 @@ describe('Parser', () => {
         it('12+35/5', () => {
             // Arrange
             const source = '12+35/5';
-            const tokens = analyzeCode(source);
 
             // Act
-            const ast = parse(tokens, source);
+            const ast = parse(source);
 
             // Assert
             expect(ast).toEqual(
@@ -112,18 +107,16 @@ describe('Parser', () => {
         it('failed: expected value', () => {
             // Arrange
             const source = '12+35/d';
-            const tokens = analyzeCode(source);
 
             // Act & Assert
-            expect(() => parse(tokens, source)).toThrowError(/Expected value, got "d"/);
+            expect(() => parse(source)).toThrowError(/Expected value, got "d"/);
         });
         it('failed: unexpected token', () => {
             // Arrange
             const source = '12+35d';
-            const tokens = analyzeCode(source);
 
             // Act & Assert
-            expect(() => parse(tokens, source)).toThrowError(/Unexpected token: "d"/);
+            expect(() => parse(source)).toThrowError(/Unexpected token: "d"/);
         });
     });
 });
