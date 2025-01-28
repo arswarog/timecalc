@@ -1,2 +1,3 @@
-export * from './lexer.ts';
-export * from './types.ts';
+export * from './lexer';
+export * from './types';
+export * from './create-token';

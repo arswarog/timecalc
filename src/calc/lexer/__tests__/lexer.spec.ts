@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeCode } from './lexer.ts';
-import { createToken } from './create-token.ts';
-import { TokenType } from './types.ts';
+import { analyzeCode } from '../lexer';
+import { createToken } from '../create-token';
+import { TokenType } from '../types';
 
 describe('Lexer', () => {
     it('должен вернуть пустой массив токенов для пустой строки', () => {
