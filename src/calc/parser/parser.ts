@@ -67,7 +67,7 @@ function parseBinaryExpression(ctx: Context, precedence = 0): BinaryExpressionNo
 function parseValue(ctx: Context): BinaryExpressionNode | ValueNode {
     const value = ctx.getCurrentToken();
 
-    if (value.type === TokenType.DecimalValue) {
+    if (value.type === TokenType.NumericLiteral) {
         ctx.next();
         return new ValueNode(value);
     }

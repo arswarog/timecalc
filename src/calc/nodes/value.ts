@@ -10,7 +10,7 @@ export class ValueNode extends AbstractNode {
         super();
 
         switch (valueToken.type) {
-            case TokenType.DecimalValue:
+            case TokenType.NumericLiteral:
                 if (!Number.isFinite(parseInt(valueToken.text))) {
                     throw new Error(`Invalid number "${valueToken.text}"`);
                 }
