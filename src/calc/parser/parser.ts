@@ -69,7 +69,7 @@ function parseValue(ctx: Context): BinaryExpressionNode | ValueNode {
 
     if (value.type === TokenType.DecimalValue) {
         ctx.next();
-        return new ValueNode(value.text);
+        return new ValueNode(value);
     }
 
     throw new Error(`Expected value, got "${value.text}"`);
