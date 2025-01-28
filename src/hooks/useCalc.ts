@@ -11,14 +11,16 @@ export function useCalc(): UseCalc {
     const [display, setDisplay] = useState<IDisplayData>({
         code: '',
         result: '',
+        error: true,
     });
 
     const actions = useMemo(() => {
-        let code = '6д + 2:00';
+        let code = '0';
 
         setDisplay({
             code,
-            result: '6д 2ч 12м',
+            result: '0',
+            error: false,
         });
 
         const handleChange = (newCode: string) => {
@@ -31,11 +33,13 @@ export function useCalc(): UseCalc {
                 setDisplay({
                     code,
                     result: result.value.toString(),
+                    error: false,
                 });
             } catch (_) {
                 setDisplay((state) => ({
                     ...state,
                     code,
+                    error: true,
                 }));
             }
         };
