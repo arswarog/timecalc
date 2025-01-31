@@ -1,20 +1,22 @@
 import './App.css';
 import { reatomContext } from '@reatom/npm-react';
+import block from 'bem-css-modules';
 
-import { CalculatorUI } from './components/CalculatorUI';
+import styles from './components/CalculatorUI.module.scss';
+import { DisplayWidget } from './components/Display.widget';
+import { KeyboardWidget } from './components/Keyboard.widget';
 import { SiteTitle } from './components/SiteTitle';
-import { useCalc } from './hooks/useCalc';
 import { ctx } from './state';
+const b = block(styles, 'CalculatorUI');
 
 export function App() {
-    const { display, onChange } = useCalc();
     return (
         <reatomContext.Provider value={ctx}>
             <SiteTitle />
-            <CalculatorUI
-                display={display}
-                onChange={onChange}
-            />
+            <div className={b()}>
+                <DisplayWidget />
+                <KeyboardWidget />
+            </div>
         </reatomContext.Provider>
     );
 }
