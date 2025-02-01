@@ -2,7 +2,7 @@ import { ButtonCode } from '../types';
 
 export const keyboardLayout: ButtonCode[][] = [
     [ButtonCode.Plus, ButtonCode.Minus, ButtonCode.Multiply, ButtonCode.Divide],
-    [ButtonCode.Symbol7, ButtonCode.Symbol8, ButtonCode.Symbol9, ButtonCode.Enter],
+    [ButtonCode.Symbol7, ButtonCode.Symbol8, ButtonCode.Symbol9, ButtonCode.Backspace],
     [ButtonCode.Symbol4, ButtonCode.Symbol5, ButtonCode.Symbol6, ButtonCode.Enter],
     [ButtonCode.Symbol1, ButtonCode.Symbol2, ButtonCode.Symbol3, ButtonCode.Enter],
     [ButtonCode.Symbol0, ButtonCode.Symbol0, ButtonCode.SymbolDot, ButtonCode.Enter],
@@ -33,4 +33,5 @@ export const buttonsMeta: { [key in ButtonCode]: IButtonMeta } = {
     [ButtonCode.SymbolDot]: { text: '.' },
 
     [ButtonCode.Enter]: { text: '=', enter: true },
+    [ButtonCode.Backspace]: { text: '←' },
 };
