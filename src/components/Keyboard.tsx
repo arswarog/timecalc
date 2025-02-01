@@ -4,10 +4,8 @@ import { JSX, useMemo } from 'react';
 
 import { ButtonCode } from '../types';
 
-import { buttonsMeta, IButtonMeta, keyboardLayout } from './Keyboard.layout.ts';
+import { buttonsMeta, IButtonMeta, keyboardLayout } from './Keyboard.layout';
 import styles from './Keyboard.module.scss';
-
-
 
 const b = block(styles, 'Keyboard');
 

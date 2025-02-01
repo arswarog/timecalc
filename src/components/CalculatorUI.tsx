@@ -3,8 +3,8 @@ import block from 'bem-css-modules';
 import { IDisplayData, ButtonCode } from '../types';
 
 import styles from './CalculatorUI.module.scss';
-import { Display } from './Display.tsx';
-import { Keyboard } from './Keyboard.tsx';
+import { Display } from './Display';
+import { Keyboard } from './Keyboard';
 
 export interface ICalculatorUIProps {
     display: IDisplayData;
