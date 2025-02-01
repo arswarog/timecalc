@@ -18,4 +18,5 @@ export enum ButtonCode {
 
     Enter = '=',
     Backspace = '←',
+    Clear = 'C',
 }

@@ -19,6 +19,9 @@ export const pressKeyAction = action((ctx, key: string) => {
     if (key === ButtonCode.Enter) {
         return;
     }
+    if (key === ButtonCode.Clear) {
+        return expressionAtom(ctx, '0');
+    }
 
     const newValue = expression === '0' ? key : expression + key;
 
