@@ -5,14 +5,12 @@ import block from 'bem-css-modules';
 import styles from './components/CalculatorUI.module.scss';
 import { DisplayWidget } from './components/Display.widget';
 import { KeyboardWidget } from './components/Keyboard.widget';
-import { SiteTitle } from './components/SiteTitle';
 import { ctx } from './state';
 const b = block(styles, 'CalculatorUI');
 
 export function App() {
     return (
         <reatomContext.Provider value={ctx}>
-            <SiteTitle />
             <div className={b()}>
                 <DisplayWidget />
                 <KeyboardWidget />
