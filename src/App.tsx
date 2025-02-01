@@ -1,6 +1,6 @@
 import './App.css';
-import { SiteTitle } from './components/SiteTitle.tsx';
 import { CalculatorUI } from './components/CalculatorUI.tsx';
+import { SiteTitle } from './components/SiteTitle.tsx';
 import { useCalc } from './hooks/useCalc.ts';
 
 export function App() {

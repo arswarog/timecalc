@@ -1,5 +1,5 @@
-import { Token, TokenType } from './types.ts';
 import { createToken } from './create-token.ts';
+import { Token, TokenType } from './types.ts';
 
 export function analyzeCode(code: string): Token[] {
     const tokens: Token[] = [];
