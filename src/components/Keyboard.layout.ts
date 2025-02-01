@@ -33,6 +33,6 @@ export const buttonsMeta: { [key in ButtonCode]: IButtonMeta } = {
     [ButtonCode.SymbolDot]: { text: '.' },
 
     [ButtonCode.Enter]: { text: '=', enter: true },
-    [ButtonCode.Backspace]: { text: '←' },
+    [ButtonCode.Backspace]: { text: '⬅' },
     [ButtonCode.Clear]: { text: 'C' },
 };

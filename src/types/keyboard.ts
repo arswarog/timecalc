@@ -17,6 +17,6 @@ export enum ButtonCode {
     Divide = '÷',
 
     Enter = '=',
-    Backspace = '←',
+    Backspace = 'backspace',
     Clear = 'C',
 }
