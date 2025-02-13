@@ -77,4 +77,8 @@ const tokenDeclarations: { type: TokenType; chars: string }[] = [
         type: TokenType.DivideOperation,
         chars: '/÷',
     },
+    {
+        type: TokenType.HourLiteral,
+        chars: 'hHчЧ',
+    },
 ];

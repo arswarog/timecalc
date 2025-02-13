@@ -95,5 +95,33 @@ describe('Lexer', () => {
                 });
             });
         });
+        describe('time literals', () => {
+            describe('HourLiteral', () => {
+                it('1h', () => {
+                    expect(analyzeCode('1h')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'h', 1),
+                    ]);
+                });
+                it('1H', () => {
+                    expect(analyzeCode('1H')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'H', 1),
+                    ]);
+                });
+                it('1ч', () => {
+                    expect(analyzeCode('1ч')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'ч', 1),
+                    ]);
+                });
+                it('1Ч', () => {
+                    expect(analyzeCode('1Ч')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.HourLiteral, 'Ч', 1),
+                    ]);
+                });
+            });
+        });
     });
 });
