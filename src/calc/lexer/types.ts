@@ -8,6 +8,7 @@ export enum TokenType {
     DivideOperation,
     HourLiteral,
     MinuteLiteral,
+    SecondLiteral,
 }
 
 export interface Positionable {
