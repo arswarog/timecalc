@@ -81,4 +81,8 @@ const tokenDeclarations: { type: TokenType; chars: string }[] = [
         type: TokenType.HourLiteral,
         chars: 'hHчЧ',
     },
+    {
+        type: TokenType.MinuteLiteral,
+        chars: 'mMмМ',
+    },
 ];

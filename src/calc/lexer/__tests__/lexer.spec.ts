@@ -122,6 +122,32 @@ describe('Lexer', () => {
                     ]);
                 });
             });
+            describe('MinuteLiteral', () => {
+                it('1m', () => {
+                    expect(analyzeCode('1m')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'm', 1),
+                    ]);
+                });
+                it('1M', () => {
+                    expect(analyzeCode('1M')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'M', 1),
+                    ]);
+                });
+                it('1м', () => {
+                    expect(analyzeCode('1м')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'м', 1),
+                    ]);
+                });
+                it('1М', () => {
+                    expect(analyzeCode('1М')).toEqual([
+                        createToken(TokenType.NumericLiteral, '1', 0),
+                        createToken(TokenType.MinuteLiteral, 'М', 1),
+                    ]);
+                });
+            });
         });
     });
 });
