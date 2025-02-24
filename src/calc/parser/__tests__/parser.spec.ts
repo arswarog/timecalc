@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { TokenType, createToken } from '../../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
+import { ParserError } from '../errors';
 import { parse } from '../parser';
 
 describe('Parser', () => {
@@ -108,17 +109,21 @@ describe('Parser', () => {
         });
         it('failed: expected value', () => {
             // Arrange
-            const source = '12+35/d';
+            const source = '12+35/x';
 
             // Act & Assert
-            expect(() => parse(source)).toThrowError(/Expected value, got "d"/);
+            expect(() => parse(source)).toThrowError(
+                new ParserError('Expected value, got "x"', source, 6),
+            );
         });
         it('failed: unexpected token', () => {
             // Arrange
-            const source = '12+35d';
+            const source = '12+35x';
 
             // Act & Assert
-            expect(() => parse(source)).toThrowError(/Unexpected token: "d"/);
+            expect(() => parse(source)).toThrowError(
+                new ParserError('Unexpected token "x"', source, 5),
+            );
         });
     });
 });
