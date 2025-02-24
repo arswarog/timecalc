@@ -1,8 +1,8 @@
+import { ParserError } from '../errors';
 import { analyzeCode, Token, TokenType } from '../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../nodes';
 
 import { ParserContext, createContext } from './context';
-import { ParserError } from './errors';
 
 export function parse(source: string): RootNode {
     return parseTokens(analyzeCode(source), source);

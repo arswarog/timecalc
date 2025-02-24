@@ -1,4 +1,4 @@
-import { SyntaxContext } from './context';
+import { SyntaxContext } from './parser/context';
 
 export class ParserError extends Error {
     constructor(

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
+import { ParserError } from '../../errors';
 import { TokenType, createToken } from '../../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
-import { ParserError } from '../errors';
 import { parse } from '../parser';
 
 describe('Parser', () => {

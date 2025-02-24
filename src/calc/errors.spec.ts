@@ -1,9 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { analyzeCode } from '../lexer';
-
-import { createContext, SyntaxContext } from './context';
 import { ParserError } from './errors';
+import { analyzeCode } from './lexer';
+import { createContext, SyntaxContext } from './parser/context';
 
 describe('Errors', () => {
     describe('ParserError', () => {
