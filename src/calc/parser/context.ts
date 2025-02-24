@@ -1,6 +1,6 @@
 import { Token } from '../lexer';
 
-export interface SyntaxContext {
+export interface ParserContext {
     index: number;
     getCurrentToken(): Token;
     next(): void;
@@ -8,7 +8,7 @@ export interface SyntaxContext {
     getText(): string;
 }
 
-export function createContext(tokens: Token[]): SyntaxContext {
+export function createContext(tokens: Token[]): ParserContext {
     let index = 0;
     return {
         get index() {

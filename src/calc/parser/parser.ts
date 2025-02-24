@@ -1,7 +1,7 @@
 import { analyzeCode, Token, TokenType } from '../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../nodes';
 
-import { SyntaxContext, createContext } from './context';
+import { ParserContext, createContext } from './context';
 
 export function parse(source: string): RootNode {
     return parseTokens(analyzeCode(source), source);
@@ -23,7 +23,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 }
 
 function parseBinaryExpression(
-    ctx: SyntaxContext,
+    ctx: ParserContext,
     precedence = 0,
 ): BinaryExpressionNode | ValueNode {
     let left = parseValue(ctx);
@@ -55,7 +55,7 @@ function parseBinaryExpression(
     return left;
 }
 
-function parseValue(ctx: SyntaxContext): BinaryExpressionNode | ValueNode {
+function parseValue(ctx: ParserContext): BinaryExpressionNode | ValueNode {
     const value = ctx.getCurrentToken();
 
     if (value.type === TokenType.NumericLiteral) {
