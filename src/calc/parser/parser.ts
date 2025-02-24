@@ -1,3 +1,4 @@
+import { ParserError } from '../errors';
 import { analyzeCode, Token, TokenType } from '../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../nodes';
 
@@ -16,7 +17,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     const root = new RootNode(parseBinaryExpression(ctx), source);
 
     if (!ctx.isEnd()) {
-        throw new Error(`Unexpected token: "${ctx.getCurrentToken().text}"`);
+        throw ParserError.fromCtx(`Unexpected token "${ctx.getCurrentToken().text}"`, ctx);
     }
 
     return root;
@@ -63,7 +64,7 @@ function parseValue(ctx: ParserContext): BinaryExpressionNode | ValueNode {
         return new ValueNode(value);
     }
 
-    throw new Error(`Expected value, got "${value.text}"`);
+    throw ParserError.fromCtx(`Expected value, got "${value.text}"`, ctx);
 }
 
 function getPrecedence(operator: Token): number {
