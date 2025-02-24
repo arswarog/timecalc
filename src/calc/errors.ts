@@ -1,3 +1,5 @@
+import { Positionable, Token } from './lexer';
+import { AbstractNode, RootNode } from './nodes';
 import { SyntaxContext } from './parser/context';
 
 export class ParserError extends Error {
@@ -6,7 +8,11 @@ export class ParserError extends Error {
         public readonly source: string,
         public readonly position: number,
     ) {
-        super(makePointedError(error, source, position));
+        const message = source
+            ? makePointedError(error, source, position)
+            : error + ' at position ' + position;
+
+        super(message);
     }
 
     static fromCtx(error: string, ctx: SyntaxContext): ParserError {
@@ -14,6 +20,17 @@ export class ParserError extends Error {
         const position = ctx.getCurrentToken().start;
 
         return new ParserError(error, source, position);
+    }
+
+    static fromNode(error: string, token: Positionable): ParserError {
+        return new ParserError(error, '', token.start);
+    }
+
+    static addSource(error: ParserError, source: string): ParserError {
+        const newError = new ParserError(error.error, source, error.position);
+        // @ts-expect-error in fact, cause exists in Error
+        newError.cause = error;
+        return newError;
     }
 }
 
