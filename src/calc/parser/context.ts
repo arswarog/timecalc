@@ -5,6 +5,7 @@ export interface SyntaxContext {
     getCurrentToken(): Token;
     next(): void;
     isEnd(): boolean;
+    getText(): string;
 }
 
 export function createContext(tokens: Token[]): SyntaxContext {
@@ -21,6 +22,9 @@ export function createContext(tokens: Token[]): SyntaxContext {
         },
         isEnd(): boolean {
             return index >= tokens.length;
+        },
+        getText() {
+            return tokens.map((t) => t.text).join('');
         },
     };
 }
