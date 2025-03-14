@@ -1,4 +1,4 @@
-import { ParserError } from '../errors';
+import { PositionalError } from '../errors';
 import { Token, TokenType } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
@@ -64,6 +64,6 @@ function evaluateNumberExpression(
                 value: left.value / right.value,
             };
         default:
-            throw ParserError.fromNode(`Unexpected operator "${operator.text}"`, operator);
+            throw new PositionalError(`Unexpected operator "${operator.text}"`, operator);
     }
 }

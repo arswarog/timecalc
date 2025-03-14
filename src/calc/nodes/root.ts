@@ -1,4 +1,4 @@
-import { ParserError } from '../errors';
+import { HighlightedError, PositionalError } from '../errors';
 
 import { AbstractNode, NodeType } from './abstract';
 import { BinaryExpressionNode } from './binary-expression';
@@ -22,8 +22,8 @@ export class RootNode extends AbstractNode {
         try {
             return this.expression.evaluate();
         } catch (e) {
-            if (e instanceof ParserError) {
-                throw ParserError.addSource(e, this.source);
+            if (e instanceof PositionalError) {
+                throw new HighlightedError(e, this.source);
             } else {
                 throw e;
             }

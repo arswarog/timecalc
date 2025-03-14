@@ -1,65 +1,49 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { ParserError } from './errors';
+import { HighlightedError, PositionalError } from './errors';
 import { analyzeCode } from './lexer';
-import { BinaryExpressionNode } from './nodes';
-import { parse } from './parser';
-import { createContext, SyntaxContext } from './parser/context';
+import { createContext } from './parser/context';
 
 describe('Errors', () => {
-    describe('ParserError', () => {
-        describe('fromCtx', () => {
-            const tokens = analyzeCode('12 + 3 + 5');
-            let ctx: SyntaxContext;
-
-            beforeEach(() => {
-                ctx = createContext(tokens);
-            });
-
-            it('отображение места ошибки в первом символе', () => {
-                expect(() => {
-                    throw ParserError.fromCtx('Unexpected token', ctx);
-                }).throws('Unexpected token\n' + 'Line: 12 + 3 + 5\n' + '      ^');
-            });
-            it('отображение места ошибки в середине выражения', () => {
-                ctx.next();
-                ctx.next();
-                ctx.next();
-
-                expect(() => {
-                    throw ParserError.fromCtx('Unexpected token', ctx);
-                }).throws('Unexpected token\n' + 'Line: 12 + 3 + 5\n' + '          ^');
-            });
+    describe('PositionalError', () => {
+        it('в середине выражения', () => {
+            expect(() => {
+                throw new PositionalError('Unexpected token', { start: 3, end: 4, fullEnd: 4 });
+            }).throws('Unexpected token at position 3');
         });
-        describe('fromNode', () => {
-            it('BinaryExpressionNode.operator', () => {
-                const source = '15+5';
+    });
+    describe('HighlightedError', () => {
+        it('в середине выражения', () => {
+            const error = new PositionalError('Unexpected token', { start: 4, end: 6, fullEnd: 7 });
 
-                const ast = parse(source);
+            expect(() => {
+                throw new HighlightedError(error, '1 + 23 + 5');
+            }).throws('Unexpected token\n' + 'Line: 1 + 23 + 5\n' + '          ~~');
+        });
+        it('в первом символе', () => {
+            const error = new PositionalError('Unexpected token', { start: 0, end: 2, fullEnd: 3 });
 
-                const node = ast.expression as BinaryExpressionNode;
+            expect(() => {
+                throw new HighlightedError(error, '12 + 3 + 5');
+            }).throws('Unexpected token\n' + 'Line: 12 + 3 + 5\n' + '      ~~');
+        });
+    });
+    describe('использование', () => {
+        it('ошибка из токена', () => {
+            const source = '1 + 23 + 5';
+            const tokens = analyzeCode(source);
+            const ctx = createContext(tokens);
 
-                expect(() => {
-                    throw ParserError.addSource(
-                        ParserError.fromNode('Unexpected token', node.operator),
-                        source,
-                    );
-                }).throws('Unexpected token\n' + 'Line: 15+5\n' + '        ^');
-            });
-            it('BinaryExpressionNode.right', () => {
-                const source = '15+5';
+            ctx.next();
+            ctx.next();
+            ctx.next();
+            ctx.next();
 
-                const ast = parse(source);
+            const error = new PositionalError('Unexpected token', ctx.getCurrentToken());
 
-                const node = ast.expression as BinaryExpressionNode;
-
-                expect(() => {
-                    throw ParserError.addSource(
-                        ParserError.fromNode('Unexpected token', node.operator),
-                        source,
-                    );
-                }).throws('Unexpected token\n' + 'Line: 15+5\n' + '        ^');
-            });
+            expect(() => {
+                throw new HighlightedError(error, source);
+            }).throws('Unexpected token\n' + 'Line: 1 + 23 + 5\n' + '          ~~');
         });
     });
 });

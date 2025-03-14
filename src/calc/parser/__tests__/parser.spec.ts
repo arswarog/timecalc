@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ParserError } from '../../errors';
+import { HighlightedError, PositionalError } from '../../errors';
 import { TokenType, createToken } from '../../lexer';
 import { BinaryExpressionNode, RootNode, ValueNode } from '../../nodes';
 import { parse } from '../parser';
@@ -113,16 +113,26 @@ describe('Parser', () => {
 
             // Act & Assert
             expect(() => parse(source)).toThrowError(
-                new ParserError('Expected value, got "x"', source, 6),
+                new HighlightedError(
+                    new PositionalError('Expected value, got "x"', {
+                        start: 6,
+                        end: 7,
+                        fullEnd: 7,
+                    }),
+                    source,
+                ),
             );
         });
         it('failed: unexpected token', () => {
             // Arrange
-            const source = '12+35x';
+            const source = '12+35xx';
 
             // Act & Assert
             expect(() => parse(source)).toThrowError(
-                new ParserError('Unexpected token "x"', source, 5),
+                new HighlightedError(
+                    new PositionalError('Unexpected token "xx"', { start: 5, end: 7, fullEnd: 7 }),
+                    source,
+                ),
             );
         });
     });

@@ -1,44 +1,28 @@
-import { Positionable, Token } from './lexer';
-import { AbstractNode, RootNode } from './nodes';
-import { SyntaxContext } from './parser/context';
+import { Positionable } from './lexer';
 
-export class ParserError extends Error {
+export class PositionalError extends Error {
     constructor(
         public readonly error: string,
-        public readonly source: string,
-        public readonly position: number,
+        public readonly position: Positionable,
     ) {
-        const message = source
-            ? makePointedError(error, source, position)
-            : error + ' at position ' + position;
-
-        super(message);
-    }
-
-    static fromCtx(error: string, ctx: SyntaxContext): ParserError {
-        const source = ctx.getText();
-        const position = ctx.getCurrentToken().start;
-
-        return new ParserError(error, source, position);
-    }
-
-    static fromNode(error: string, token: Positionable): ParserError {
-        return new ParserError(error, '', token.start);
-    }
-
-    static addSource(error: ParserError, source: string): ParserError {
-        const newError = new ParserError(error.error, source, error.position);
-        // @ts-expect-error in fact, cause exists in Error
-        newError.cause = error;
-        return newError;
+        super(`${error} at position ${position.start}`);
     }
 }
 
-export function makePointedError(error: string, source: string, position: number): string {
-    const prefix = 'Line: ';
+export class HighlightedError extends Error {
+    constructor(
+        public readonly error: PositionalError,
+        public readonly source: string,
+    ) {
+        const prefix = 'Line: ';
+        const { start, end } = error.position;
 
-    const line = source;
-    const pointer = ' '.repeat(position + prefix.length) + '^';
+        const line = source;
+        const pointer = ' '.repeat(start + prefix.length) + '~'.repeat(end - start);
 
-    return `${error}\n${prefix}${line}\n${pointer}`;
+        const message = `${error.error}\n${prefix}${line}\n${pointer}`;
+        super(message);
+        // @ts-expect-error in fact, cause exists in Error
+        this.cause = error;
+    }
 }
