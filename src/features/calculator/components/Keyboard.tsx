@@ -3,9 +3,10 @@ import { JSX, useMemo } from 'react';
 import block from 'bem-css-modules';
 import { invert } from 'lodash';
 
-import { ButtonCode } from '../types';
+import { ButtonCode } from '@src/types';
 
-import { buttonsMeta, IButtonMeta, keyboardLayout } from './Keyboard.layout';
+import { buttonsMeta, IButtonMeta, keyboardLayout } from '../model';
+
 import styles from './Keyboard.module.scss';
 
 const b = block(styles, 'Keyboard');
@@ -16,7 +17,7 @@ export interface IKeyboardProps {
     onClick?: (value: ButtonCode) => void;
 }
 
-export function Keyboard({ onClick }: IKeyboardProps) {
+export function KeyboardComponent({ onClick }: IKeyboardProps) {
     const buttons = useMemo(() => buildButtons(buttonsMeta, keyboardLayout, onClick), [onClick]);
     const gridTemplateAreas = useMemo(() => buildGridTemplateAreas(keyboardLayout), []);
 

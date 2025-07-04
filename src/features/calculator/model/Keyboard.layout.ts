@@ -1,4 +1,4 @@
-import { ButtonCode } from '../types';
+import { ButtonCode } from '@src/types';
 
 export const keyboardLayout: ButtonCode[][] = [
     [ButtonCode.Plus, ButtonCode.Minus, ButtonCode.Multiply, ButtonCode.Divide],
