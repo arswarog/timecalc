@@ -1,7 +1,6 @@
 import { atom } from '@reatom/framework';
 
-import { resultAtom } from './evaluation.atom';
-import { expressionAtom } from './expression.atom';
+import { expressionAtom, resultAtom } from '@src/state';
 
 export interface DisplayAtom {
     code: string;

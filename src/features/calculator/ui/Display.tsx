@@ -1,16 +1,17 @@
 import { useAction, useAtom } from '@reatom/npm-react';
 
-import { changeExpressionAction, displayAtom } from '../state';
+import { changeExpressionAction } from '@src/state';
 
-import { Display } from './Display';
+import { DisplayComponent } from '../components';
+import { displayAtom } from '../model';
 
-export function DisplayWidget() {
+export function Display() {
     const [data] = useAtom(displayAtom);
 
     const handleChange = useAction(changeExpressionAction);
 
     return (
-        <Display
+        <DisplayComponent
             data={data}
             onChange={handleChange}
         />

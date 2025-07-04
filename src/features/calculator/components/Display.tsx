@@ -1,6 +1,6 @@
 import block from 'bem-css-modules';
 
-import { DisplayAtom } from '../state';
+import { DisplayAtom } from '@src/features/calculator/model/display.atom.ts';
 
 import styles from './Display.module.scss';
 
@@ -11,7 +11,7 @@ export interface IDisplayProps {
     onChange?: (code: string) => void;
 }
 
-export function Display({ data, onChange }: IDisplayProps) {
+export function DisplayComponent({ data, onChange }: IDisplayProps) {
     const { code, result, error } = data;
     return (
         <div className={b()}>
