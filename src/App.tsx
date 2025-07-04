@@ -1,17 +1,7 @@
-import block from 'bem-css-modules';
+import { CalculatorPage } from '@src/pages/calculator';
 
 import './App.css';
 
-import styles from './components/CalculatorUI.module.scss';
-import { DisplayWidget } from './components/Display.widget';
-import { KeyboardWidget } from './components/Keyboard.widget';
-const b = block(styles, 'CalculatorUI');
-
 export function App() {
-    return (
-        <div className={b()}>
-            <DisplayWidget />
-            <KeyboardWidget />
-        </div>
-    );
+    return <CalculatorPage />;
 }
