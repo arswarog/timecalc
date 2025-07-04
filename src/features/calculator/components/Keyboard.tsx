@@ -3,7 +3,7 @@ import { JSX, useMemo } from 'react';
 import block from 'bem-css-modules';
 import { invert } from 'lodash';
 
-import { ButtonCode } from '@src/types';
+import { ButtonCode } from '@src/entities/keyboard';
 
 import { buttonsMeta, IButtonMeta, keyboardLayout } from '../model';
 

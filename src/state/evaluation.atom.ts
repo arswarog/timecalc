@@ -1,6 +1,6 @@
 import { atom } from '@reatom/framework';
 
-import { parse } from '../calc/parser';
+import { parse } from '@src/entities/calc';
 
 import { expressionAtom } from './expression.atom';
 
