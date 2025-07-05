@@ -1,7 +1,8 @@
 import { useAction } from '@reatom/npm-react';
 
-import { KeyboardComponent } from '../components';
-import { pressKeyAction } from '../model';
+import { pressKeyAction } from '@src/features/calculator';
+
+import { KeyboardComponent } from './component';
 
 export function Keyboard() {
     const handleClick = useAction(pressKeyAction);

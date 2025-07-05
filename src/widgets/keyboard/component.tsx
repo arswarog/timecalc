@@ -5,9 +5,8 @@ import { invert } from 'lodash';
 
 import { ButtonCode } from '@src/entities/keyboard';
 
-import { buttonsMeta, IButtonMeta, keyboardLayout } from '../model';
-
-import styles from './Keyboard.module.scss';
+import styles from './component.module.scss';
+import { buttonsMeta, IButtonMeta, keyboardLayout } from './keyboard.layout';
 
 const b = block(styles, 'Keyboard');
 
