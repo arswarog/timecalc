@@ -1,6 +1,6 @@
 import { useAction, useAtom } from '@reatom/npm-react';
 
-import { changeExpressionAction } from '@src/features/calculator/model';
+import { changeExpressionAction } from '@src/entities/expression';
 
 import { screenAtom } from './atom';
 import { ScreenComponent } from './component';

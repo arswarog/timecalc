@@ -1,6 +1,7 @@
 import { atom } from '@reatom/framework';
 
-import { expressionAtom, resultAtom } from '@src/features/calculator';
+import { expressionAtom } from '@src/entities/expression';
+import { resultAtom } from '@src/features/evaluate';
 
 export interface ScreenAtom {
     code: string;

@@ -1,6 +1,6 @@
 import { useAction } from '@reatom/npm-react';
 
-import { pressKeyAction } from '@src/features/calculator';
+import { pressKeyAction } from '@src/entities/expression';
 
 import { KeyboardComponent } from './component';
 
