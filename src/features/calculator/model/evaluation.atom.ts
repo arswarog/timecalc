@@ -1,8 +1,7 @@
 import { atom } from '@reatom/framework';
 
 import { parse } from '@src/entities/calc';
-
-import { expressionAtom } from './expression.atom';
+import { expressionAtom } from '@src/entities/expression';
 
 export const evaluationAtom = atom((ctx) => {
     const expression = ctx.spy(expressionAtom);
