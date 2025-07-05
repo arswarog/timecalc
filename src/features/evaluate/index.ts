@@ -1,1 +1,1 @@
-export * from './evaluation.atom';
+export * from './evaluate.atom';
