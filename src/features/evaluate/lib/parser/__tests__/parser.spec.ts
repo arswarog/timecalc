@@ -120,5 +120,21 @@ describe('Parser', () => {
             // Act & Assert
             expect(() => parse(source)).toThrowError(/Unexpected token: "d"/);
         });
+        it('failed: unexpected end of file', () => {
+            // Arrange
+            const source = '12+35/';
+
+            // Act & Assert
+            expect(() => parse(source)).toThrowError(
+                new HighlightedError(
+                    new PositionalError('Expected value, got "[EOF]"', {
+                        start: 6,
+                        end: 6,
+                        fullEnd: 6,
+                    }),
+                    source,
+                ),
+            );
+        });
     });
 });
