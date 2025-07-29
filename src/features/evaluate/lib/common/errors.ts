@@ -22,7 +22,7 @@ export class HighlightedError extends Error {
 
         const message = `${error.error}\n${prefix}${line}\n${pointer}`;
         super(message);
-        // @ts-expect-error in fact, cause exists in Error
+        // @ts-expect-error Error.cause is available in modern environments but not in TypeScript definitions
         this.cause = error;
     }
 }

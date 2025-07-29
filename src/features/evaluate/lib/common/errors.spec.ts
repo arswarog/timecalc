@@ -42,7 +42,7 @@ describe('Errors', () => {
                 ].join('\n'),
             );
         });
-        it('End of File', () => {
+        it('end of file', () => {
             const error = new PositionalError('Unexpected end of file', {
                 start: 3,
                 end: 3,
@@ -61,7 +61,7 @@ describe('Errors', () => {
             );
         });
     });
-    describe('использование', () => {
+    describe('Практическое использование', () => {
         it('ошибка из токена', () => {
             const source = '1 + 23 + 5';
             const tokens = analyzeCode(source);
