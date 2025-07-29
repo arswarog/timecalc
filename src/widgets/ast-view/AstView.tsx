@@ -1,4 +1,4 @@
-import { RootNode } from '@src/features/evaluate';
+import { RootNode } from '@src/parser';
 
 interface AstViewProps {
     ast: RootNode;
