@@ -117,7 +117,6 @@ describe('Parser', () => {
                     new PositionalError('Expected value, got "x"', {
                         start: 6,
                         end: 7,
-                        fullEnd: 7,
                     }),
                     source,
                 ),
@@ -130,7 +129,7 @@ describe('Parser', () => {
             // Act & Assert
             expect(() => parse(source)).toThrowError(
                 new HighlightedError(
-                    new PositionalError('Unexpected token "xx"', { start: 5, end: 7, fullEnd: 7 }),
+                    new PositionalError('Unexpected token "xx"', { start: 5, end: 7 }),
                     source,
                 ),
             );
@@ -145,7 +144,6 @@ describe('Parser', () => {
                     new PositionalError('Expected value, got "[EOF]"', {
                         start: 6,
                         end: 6,
-                        fullEnd: 6,
                     }),
                     source,
                 ),

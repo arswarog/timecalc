@@ -30,7 +30,6 @@ export const astAtom = atom((ctx) => {
                         {
                             start: 0,
                             end: expression.length,
-                            fullEnd: expression.length,
                         },
                     ),
                     expression,

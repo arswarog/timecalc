@@ -39,16 +39,14 @@ function createEofToken(tokens: Token[]): Token {
         return {
             start: 0,
             end: 0,
-            fullEnd: 0,
             text: '[EOF]',
             type: TokenType.EndOfFile,
         };
 
     return {
         type: TokenType.EndOfFile,
-        start: lastToken.fullEnd,
-        end: lastToken.fullEnd,
-        fullEnd: lastToken.fullEnd,
+        start: lastToken.end,
+        end: lastToken.end,
         text: '[EOF]',
     };
 }
