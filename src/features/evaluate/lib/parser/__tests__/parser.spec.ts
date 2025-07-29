@@ -129,7 +129,10 @@ describe('Parser', () => {
             // Act & Assert
             expect(() => parse(source)).toThrowError(
                 new HighlightedError(
-                    new PositionalError('Unexpected token "xx"', { start: 5, end: 7 }),
+                    new PositionalError('Unexpected token "xx" (UnknownSymbol)', {
+                        start: 5,
+                        end: 7,
+                    }),
                     source,
                 ),
             );
