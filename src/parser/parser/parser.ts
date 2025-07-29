@@ -1,6 +1,6 @@
 import { HighlightedError, PositionalError } from '../common';
 import { analyzeCode, Token, TokenType } from '../lexer';
-import { BinaryExpressionNode, RootNode, ValueNode } from '../nodes';
+import { BinaryExpressionNode, BracketedExpressionNode, RootNode, ValueNode } from '../nodes';
 
 import { createContext, ParserContext } from './context';
 
@@ -22,7 +22,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseBinaryExpression(ctx), source);
+    const root = new RootNode(parseBracketedExpression(ctx), source);
 
     if (!ctx.isEnd()) {
         throw new PositionalError(
@@ -34,15 +34,57 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
     return root;
 }
 
-function parseBinaryExpression(
+function parseBracketedExpression(
     ctx: ParserContext,
-    precedence = 0,
-): BinaryExpressionNode | ValueNode {
+): BracketedExpressionNode | BinaryExpressionNode | ValueNode {
     if (ctx.getCurrentToken().type === TokenType.Space) {
         ctx.next();
     }
 
-    let left = parseValue(ctx);
+    if (ctx.getCurrentToken().type !== TokenType.OpeningBracket) {
+        return parseBinaryExpression(ctx);
+    }
+
+    const openingBracket = ctx.getCurrentToken();
+
+    ctx.next();
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const expression = parseBinaryExpression(ctx);
+
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    const closingBracket = ctx.getCurrentToken();
+
+    if (closingBracket.type !== TokenType.ClosingBracket) {
+        throw new PositionalError(
+            `Expected closing bracket, got "${ctx.getCurrentToken().text}"`,
+            ctx.getCurrentToken(),
+        );
+    }
+
+    ctx.next();
+
+    return new BracketedExpressionNode(expression, openingBracket, closingBracket);
+}
+
+function parseBinaryExpression(
+    ctx: ParserContext,
+    precedence = 0,
+): BracketedExpressionNode | BinaryExpressionNode | ValueNode {
+    if (ctx.getCurrentToken().type === TokenType.Space) {
+        ctx.next();
+    }
+
+    let left =
+        ctx.getCurrentToken().type === TokenType.OpeningBracket
+            ? parseBracketedExpression(ctx)
+            : parseValue(ctx);
 
     if (ctx.getCurrentToken().type === TokenType.Space) {
         ctx.next();
