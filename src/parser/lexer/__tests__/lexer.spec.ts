@@ -95,6 +95,23 @@ describe('Lexer', () => {
                 });
             });
         });
+        describe('Символы', () => {
+            // символ открывающей и закрывающей скобочки
+            describe('OpeningBracket', () => {
+                it('(', () => {
+                    expect(analyzeCode('(')).toEqual([
+                        createToken(TokenType.OpeningBracket, '(', 0),
+                    ]);
+                });
+            });
+            describe('ClosingBracket', () => {
+                it(')', () => {
+                    expect(analyzeCode(')')).toEqual([
+                        createToken(TokenType.ClosingBracket, ')', 0),
+                    ]);
+                });
+            });
+        });
         describe('time literals', () => {
             describe('HourLiteral', () => {
                 it('1h', () => {

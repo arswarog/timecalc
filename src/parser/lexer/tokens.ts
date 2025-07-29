@@ -51,4 +51,14 @@ export const tokenDeclarations: TokenDeclaration[] = [
         chars: 'sSсС',
         single: true,
     },
+    {
+        type: TokenType.OpeningBracket,
+        chars: '(',
+        single: true,
+    },
+    {
+        type: TokenType.ClosingBracket,
+        chars: ')',
+        single: true,
+    },
 ];
