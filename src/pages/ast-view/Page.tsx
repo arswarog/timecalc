@@ -5,6 +5,7 @@ import { astAtom, astParsingErrorAtom } from '@src/features/evaluate';
 import { AstView } from '@src/widgets/ast-view';
 import { Screen } from '@src/widgets/calc-screen';
 import { ErrorView } from '@src/widgets/error-view';
+import { Navbar } from '@src/widgets/navbar';
 
 import styles from './Page.module.scss';
 const b = block(styles, 'AstViewPage');
@@ -19,6 +20,7 @@ export function AstViewPage() {
             <div className={b('display')}>
                 <Screen />
             </div>
+            <Navbar />
             <div className={b('ast')}>
                 {error && <ErrorView error={error} />}
                 {ast ? <AstView ast={ast} /> : 'Ошибка парсинга выражения'}
