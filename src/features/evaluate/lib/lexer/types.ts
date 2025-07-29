@@ -1,8 +1,8 @@
 import { Positionable } from '../common';
 
 export enum TokenType {
-    EndOfFile = -1,
-    UnknownSymbol = 0,
+    UnknownSymbol = -1,
+    EndOfFile = 0,
     Space,
     NumericLiteral,
     PlusOperation,
