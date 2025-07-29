@@ -12,13 +12,12 @@ export class RootNode extends AbstractNode {
         public source: string,
     ) {
         super();
+
+        this.start = expression.start;
+        this.end = expression.end;
     }
 
     public evaluate() {
-        if (!this.expression) {
-            throw new Error('Root expression is null');
-        }
-
         try {
             return this.expression.evaluate();
         } catch (e) {
