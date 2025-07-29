@@ -7,6 +7,7 @@ export enum NodeType {
     Root,
     Value,
     BinaryExpression,
+    BracketedExpression,
 }
 
 const INVALID_POSITION = -1;
