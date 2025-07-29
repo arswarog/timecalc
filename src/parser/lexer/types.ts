@@ -12,6 +12,8 @@ export enum TokenType {
     HourLiteral,
     MinuteLiteral,
     SecondLiteral,
+    OpeningBracket,
+    ClosingBracket,
 }
 
 export interface Token extends Positionable {

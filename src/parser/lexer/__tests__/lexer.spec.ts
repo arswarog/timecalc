@@ -95,6 +95,23 @@ describe('Lexer', () => {
                 });
             });
         });
+        describe('Символы', () => {
+            // символ открывающей и закрывающей скобочки
+            describe('OpeningBracket', () => {
+                it('(', () => {
+                    expect(analyzeCode('(')).toEqual([
+                        createToken(TokenType.OpeningBracket, '(', 0),
+                    ]);
+                });
+            });
+            describe('ClosingBracket', () => {
+                it(')', () => {
+                    expect(analyzeCode(')')).toEqual([
+                        createToken(TokenType.ClosingBracket, ')', 0),
+                    ]);
+                });
+            });
+        });
         describe('time literals', () => {
             describe('HourLiteral', () => {
                 it('1h', () => {
@@ -173,6 +190,22 @@ describe('Lexer', () => {
                         createToken(TokenType.SecondLiteral, 'С', 1),
                     ]);
                 });
+            });
+        });
+        describe('Single tokens', () => {
+            it('каждый символ генерирует отдельный токен в начале выражения', () => {
+                expect(analyzeCode('//')).toEqual([
+                    createToken(TokenType.DivideOperation, '/', 0),
+                    createToken(TokenType.DivideOperation, '/', 1),
+                ]);
+            });
+            it('каждый символ генерирует отдельный токен в середине выражения', () => {
+                expect(analyzeCode('12++30')).toEqual([
+                    createToken(TokenType.NumericLiteral, '12', 0),
+                    createToken(TokenType.PlusOperation, '+', 2),
+                    createToken(TokenType.PlusOperation, '+', 3),
+                    createToken(TokenType.NumericLiteral, '30', 4),
+                ]);
             });
         });
     });
