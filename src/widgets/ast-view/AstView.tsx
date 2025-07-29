@@ -5,5 +5,5 @@ interface AstViewProps {
 }
 
 export function AstView({ ast }: AstViewProps) {
-    return <pre>{JSON.stringify(ast, null, 2)}</pre>;
+    return <pre>{JSON.stringify(ast, null, 4)}</pre>;
 }
