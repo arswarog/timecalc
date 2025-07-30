@@ -4,6 +4,7 @@ import block from 'bem-css-modules';
 import { astParsingErrorAtom, tokensAtom } from '@src/features/evaluate';
 import { Screen } from '@src/widgets/calc-screen';
 import { ErrorView } from '@src/widgets/error-view';
+import { Navbar } from '@src/widgets/navbar';
 import { TokensView } from '@src/widgets/tokens-view';
 
 import styles from './Page.module.scss';
@@ -19,6 +20,7 @@ export function TokensViewPage() {
             <div className={b('display')}>
                 <Screen />
             </div>
+            <Navbar />
             <div className={b('ast')}>
                 {error && <ErrorView error={error} />}
                 {tokens ? <TokensView tokens={tokens} /> : 'Ошибка парсинга выражения'}
