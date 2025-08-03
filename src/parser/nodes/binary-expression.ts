@@ -62,6 +62,10 @@ function evaluateNumberExpression(
                 value: left.value * right.value,
             };
         case TokenType.DivideOperation:
+            if (right.value === 0) {
+                throw new PositionalError('Деление на ноль', operator);
+            }
+
             return {
                 type: ValueType.Number,
                 value: left.value / right.value,
