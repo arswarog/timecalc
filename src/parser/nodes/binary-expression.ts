@@ -2,7 +2,16 @@ import { PositionalError } from '../common';
 import { Token, TokenType } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
-import { NumberValue, Value, ValueType } from './value.type';
+import { Value, ValueType } from './value.type';
+
+type Operation = (left: Value, right: Value) => Value;
+
+const operationMap: Partial<Record<TokenType, Operation>> = {
+    [TokenType.PlusOperation]: plusOperation,
+    [TokenType.MinusOperation]: minusOperation,
+    [TokenType.MultiplyOperation]: multiplyOperation,
+    [TokenType.DivideOperation]: divideOperation,
+};
 
 export class BinaryExpressionNode extends AbstractNode {
     public readonly type = NodeType.BinaryExpression;
@@ -23,11 +32,13 @@ export class BinaryExpressionNode extends AbstractNode {
         const rightValue = this.right.evaluate();
 
         try {
-            return evaluateNumberExpression(
-                leftValue as NumberValue,
-                this.operator,
-                rightValue as NumberValue,
-            );
+            const operation = operationMap[this.operator.type];
+
+            if (!operation) {
+                throw new Error(`Unexpected operator "${this.operator.text}"`);
+            }
+
+            return operation(leftValue, rightValue);
         } catch (error) {
             if (error instanceof Error) {
                 throw new PositionalError(error, this);
@@ -38,46 +49,58 @@ export class BinaryExpressionNode extends AbstractNode {
     }
 }
 
-function evaluateNumberExpression(
-    left: NumberValue,
-    operator: Token,
-    right: NumberValue,
-): NumberValue {
-    if (left.type !== right.type) {
+function plusOperation(left: Value, right: Value): Value {
+    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
         throw new Error(
-            `Cannot evaluate binary expression with different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
+            `Cannot add values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
         );
     }
 
-    if (left.type !== ValueType.Number) {
-        throw new Error(`Unsupported value type for binary expression: ${ValueType[left.type]}`);
-    }
-    switch (operator.type) {
-        case TokenType.PlusOperation:
-            return {
-                type: ValueType.Number,
-                value: left.value + right.value,
-            };
-        case TokenType.MinusOperation:
-            return {
-                type: ValueType.Number,
-                value: left.value - right.value,
-            };
-        case TokenType.MultiplyOperation:
-            return {
-                type: ValueType.Number,
-                value: left.value * right.value,
-            };
-        case TokenType.DivideOperation:
-            if (right.value === 0) {
-                throw new PositionalError('Деление на ноль', operator);
-            }
+    return {
+        type: ValueType.Number,
+        value: left.value + right.value,
+    };
+}
 
-            return {
-                type: ValueType.Number,
-                value: left.value / right.value,
-            };
-        default:
-            throw new PositionalError(`Unexpected operator "${operator.text}"`, operator);
+function minusOperation(left: Value, right: Value): Value {
+    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
+        throw new Error(
+            `Cannot subtract values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
+        );
     }
+
+    return {
+        type: ValueType.Number,
+        value: left.value - right.value,
+    };
+}
+
+function multiplyOperation(left: Value, right: Value): Value {
+    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
+        throw new Error(
+            `Cannot multiply values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
+        );
+    }
+
+    return {
+        type: ValueType.Number,
+        value: left.value * right.value,
+    };
+}
+
+function divideOperation(left: Value, right: Value): Value {
+    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
+        throw new Error(
+            `Cannot divide values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
+        );
+    }
+
+    if (right.value === 0) {
+        throw new Error('Деление на ноль');
+    }
+
+    return {
+        type: ValueType.Number,
+        value: left.value / right.value,
+    };
 }
