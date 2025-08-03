@@ -1,32 +1,54 @@
+import { PositionalError } from '../common';
 import { Token, TokenType } from '../lexer';
 
 import { AbstractNode, NodeType } from './abstract';
 import { Value, ValueType } from './value.type';
 
+/**
+ * Список констант для единиц измерения времени.
+ */
+const unitMap: Partial<Record<TokenType, number>> = {
+    [TokenType.SecondLiteral]: 1,
+    [TokenType.MinuteLiteral]: 60,
+    [TokenType.HourLiteral]: 60 * 60,
+};
+
 export class ValueNode extends AbstractNode {
     public readonly type = NodeType.Value;
     public readonly value: Value;
 
-    constructor(valueToken: Token) {
+    constructor(valueToken: Token, unitToken?: Token) {
         super();
 
-        switch (valueToken.type) {
-            case TokenType.NumericLiteral:
-                if (!Number.isFinite(parseInt(valueToken.text))) {
-                    throw new Error(`Invalid number "${valueToken.text}"`);
-                }
+        const value = parseInt(valueToken.text);
 
-                this.value = {
-                    type: ValueType.Number,
-                    value: parseInt(valueToken.text),
-                };
-                break;
-            default:
-                throw new Error(`Unexpected token type: ${valueToken.type}`);
+        if (!Number.isFinite(value)) {
+            throw new PositionalError(`Invalid number "${valueToken.text}"`, valueToken);
         }
 
-        this.start = valueToken.start;
-        this.end = valueToken.end;
+        if (unitToken) {
+            const unit = unitMap[unitToken.type];
+
+            if (!unit) {
+                throw new PositionalError(`Invalid unit "${unitToken.text}"`, unitToken);
+            }
+
+            this.value = {
+                type: ValueType.Time,
+                value: value * unit,
+            };
+
+            this.start = valueToken.start;
+            this.end = unitToken.end;
+        } else {
+            this.value = {
+                type: ValueType.Number,
+                value: parseInt(valueToken.text),
+            };
+
+            this.start = valueToken.start;
+            this.end = valueToken.end;
+        }
     }
 
     public evaluate(): Value {
