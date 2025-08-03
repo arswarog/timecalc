@@ -2,10 +2,17 @@ import { Positionable } from './types';
 
 export class PositionalError extends Error {
     constructor(
-        public readonly error: string,
+        public readonly error: string | Error,
         public readonly position: Positionable,
     ) {
-        super(`${error} at position ${position.start}`);
+        const message = typeof error === 'string' ? error : error.message;
+
+        super(`${message} at position ${position.start}`);
+
+        if (error instanceof Error) {
+            // @ts-expect-error Error.cause is available in modern environments but not in TypeScript definitions
+            this.cause = error;
+        }
     }
 }
 
