@@ -120,6 +120,45 @@ describe('Evaluate', () => {
                     expect(() => root.evaluate()).toThrow('Деление на ноль');
                 });
             });
+            describe('number / time', () => {
+                it('12 / 3s', () => {
+                    // Arrange
+                    const root = parse('12 / 3s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя делить число на время');
+                });
+            });
+            describe('time / number', () => {
+                it('3m / 12', () => {
+                    // Arrange
+                    const root = parse('3m / 12');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 15, // 15 seconds
+                    });
+                });
+            });
+            describe('time / time', () => {
+                it('3m / 2m', () => {
+                    // Arrange
+                    const root = parse('3m / 2m');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Number,
+                        value: 1.5,
+                    });
+                });
+            });
         });
     });
     describe('приоритет операций', () => {
