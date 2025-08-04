@@ -4,6 +4,7 @@ import { expressionAtom } from '@src/entities/expression';
 import { analyzeCode, HighlightedError, parse, PositionalError } from '@src/parser';
 
 export const astParsingErrorAtom = atom<HighlightedError | null>(null, 'astParsingErrorAtom');
+export const evaluationErrorAtom = atom<HighlightedError | null>(null, 'evaluationErrorAtom');
 
 export const tokensAtom = atom((ctx) => {
     const expression = ctx.spy(expressionAtom);
@@ -46,13 +47,40 @@ export const astAtom = atom((ctx) => {
 }, 'astAtom');
 
 export const evaluateAtom = atom((ctx) => {
+    const expression = ctx.spy(expressionAtom);
     const ast = ctx.spy(astAtom);
     if (!ast) {
         return null;
     }
     try {
-        return ast?.evaluate();
-    } catch (_) {
+        const result = ast.evaluate();
+
+        evaluationErrorAtom(ctx, null);
+
+        return {
+            value: result,
+            expression: ctx.spy(expressionAtom),
+        };
+    } catch (error) {
+        evaluationErrorAtom(
+            ctx,
+            new HighlightedError(
+                new PositionalError(
+                    error &&
+                    typeof error === 'object' &&
+                    'message' in error &&
+                    typeof error.message === 'string'
+                        ? error.message
+                        : 'Unknown error',
+                    {
+                        start: 0,
+                        end: expression.length,
+                    },
+                ),
+                expression,
+            ),
+        );
+        console.error(error);
         return null;
     }
 }, 'evaluationAtom');

@@ -20,7 +20,7 @@ export class HighlightedError extends Error {
         const line = source;
         const pointer = ' '.repeat(start + prefix.length) + '~'.repeat(Math.max(1, end - start));
 
-        const message = `${error.error}\n${prefix}${line}\n${pointer}`;
+        const message = `${error.message}\n${prefix}${line}\n${pointer}`;
         super(message);
         // @ts-expect-error Error.cause is available in modern environments but not in TypeScript definitions
         this.cause = error;
