@@ -47,7 +47,6 @@ export const astAtom = atom((ctx) => {
 }, 'astAtom');
 
 export const evaluateAtom = atom((ctx) => {
-    const expression = ctx.spy(expressionAtom);
     const ast = ctx.spy(astAtom);
     if (!ast) {
         return null;
@@ -58,47 +57,44 @@ export const evaluateAtom = atom((ctx) => {
         evaluationErrorAtom(ctx, null);
 
         return {
-            value: result,
+            ...result,
             expression: ctx.spy(expressionAtom),
         };
     } catch (error) {
-        evaluationErrorAtom(
-            ctx,
-            new HighlightedError(
-                new PositionalError(
-                    error &&
-                    typeof error === 'object' &&
-                    'message' in error &&
-                    typeof error.message === 'string'
-                        ? error.message
-                        : 'Unknown error',
-                    {
-                        start: 0,
-                        end: expression.length,
-                    },
-                ),
-                expression,
-            ),
-        );
-        console.error(error);
+        if (error instanceof HighlightedError) {
+            evaluationErrorAtom(ctx, error);
+            console.error(error);
+            return null;
+        }
         return null;
     }
 }, 'evaluationAtom');
 
 let lastResult: string = '';
 
-export const resultAtom = atom((ctx) => {
+export interface ResultAtom {
+    result: string;
+    invalidExpression: boolean;
+    runtimeError: string;
+}
+
+export const resultAtom = atom<ResultAtom>((ctx) => {
     const evaluation = ctx.spy(evaluateAtom);
+    const astParsingError = ctx.spy(astParsingErrorAtom);
+    const evaluationError = ctx.spy(evaluationErrorAtom);
+
     if (evaluation === null) {
         return {
             result: lastResult,
-            error: true,
+            invalidExpression: !!astParsingError,
+            runtimeError: evaluationError ? evaluationError.originalMessage : '',
         };
     }
 
     lastResult = evaluation.value.toString();
     return {
         result: lastResult,
-        error: false,
+        invalidExpression: false,
+        runtimeError: '',
     };
 }, 'resultAtom');

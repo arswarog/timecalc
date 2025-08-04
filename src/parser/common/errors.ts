@@ -1,22 +1,32 @@
 import { Positionable } from './types';
 
 export class PositionalError extends Error {
+    public readonly originalMessage: string;
+
     constructor(
-        public readonly error: string | Error,
+        public readonly error: string | Error | PositionalError,
         public readonly position: Positionable,
     ) {
-        const message = typeof error === 'string' ? error : error.message;
+        const message =
+            typeof error === 'string'
+                ? error
+                : 'originalMessage' in error
+                  ? error.originalMessage
+                  : error.message;
 
         super(`${message} at position ${position.start}`);
 
+        this.originalMessage = message;
+
         if (error instanceof Error) {
-            // @ts-expect-error Error.cause is available in modern environments but not in TypeScript definitions
             this.cause = error;
         }
     }
 }
 
 export class HighlightedError extends Error {
+    public readonly originalMessage: string;
+
     constructor(
         public readonly error: PositionalError,
         public readonly source: string,
@@ -27,9 +37,11 @@ export class HighlightedError extends Error {
         const line = source;
         const pointer = ' '.repeat(start + prefix.length) + '~'.repeat(Math.max(1, end - start));
 
-        const message = `${error.message}\n${prefix}${line}\n${pointer}`;
+        const message = `${error.originalMessage}\n${prefix}${line}\n${pointer}`;
+
         super(message);
-        // @ts-expect-error Error.cause is available in modern environments but not in TypeScript definitions
+
+        this.originalMessage = error.originalMessage;
         this.cause = error;
     }
 }

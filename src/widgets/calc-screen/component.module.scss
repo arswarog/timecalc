@@ -28,8 +28,12 @@
         text-align: end;
         transition: 0.3s;
 
-        &_error {
-            opacity: 0.5;
+        &_invalidExpression {
+            opacity: 0.3;
+        }
+
+        &_runtimeError {
+            color: #ff0000;
         }
     }
 }

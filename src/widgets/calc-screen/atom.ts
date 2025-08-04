@@ -6,7 +6,8 @@ import { resultAtom } from '@src/features/evaluate';
 export interface ScreenAtom {
     code: string;
     result: string;
-    error: boolean;
+    invalidExpression: boolean;
+    runtimeError: string;
 }
 
 export const screenAtom = atom<ScreenAtom>((ctx) => {
@@ -16,6 +17,7 @@ export const screenAtom = atom<ScreenAtom>((ctx) => {
     return {
         code,
         result: result.result,
-        error: result.error,
+        invalidExpression: result.invalidExpression,
+        runtimeError: result.runtimeError,
     };
 });

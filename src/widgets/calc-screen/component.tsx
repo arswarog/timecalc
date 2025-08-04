@@ -11,7 +11,7 @@ export interface IScreenProps {
 }
 
 export function ScreenComponent({ data, onChange }: IScreenProps) {
-    const { code, result, error } = data;
+    const { code, result, invalidExpression, runtimeError } = data;
     return (
         <div className={b()}>
             <input
@@ -20,7 +20,14 @@ export function ScreenComponent({ data, onChange }: IScreenProps) {
                 onChange={(e) => onChange?.(e.target.value)}
                 autoFocus
             />
-            <div className={b('result', { error })}>&nbsp;{result}</div>
+            <div
+                className={b('result', {
+                    invalidExpression,
+                    runtimeError: !!runtimeError,
+                })}
+            >
+                &nbsp;{runtimeError ? runtimeError : result}
+            </div>
         </div>
     );
 }
