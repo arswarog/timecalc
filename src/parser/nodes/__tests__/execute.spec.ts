@@ -117,7 +117,67 @@ describe('Evaluate', () => {
                     const root = parse('12 / 0');
 
                     // Act & Assert
-                    expect(() => root.evaluate()).toThrow('Деление на ноль');
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
+                });
+            });
+            describe('number / time', () => {
+                it('12 / 3s', () => {
+                    // Arrange
+                    const root = parse('12 / 3s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя делить число на время');
+                });
+                it('12 / 0s', () => {
+                    // Arrange
+                    const root = parse('12 / 0s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
+                });
+            });
+            describe('time / number', () => {
+                it('3m / 12', () => {
+                    // Arrange
+                    const root = parse('3m / 12');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 15, // 15 seconds
+                    });
+                });
+                it('10h / 0', () => {
+                    // Arrange
+                    const root = parse('10h / 0');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
+                });
+            });
+            describe('time / time', () => {
+                it('3m / 2m', () => {
+                    // Arrange
+                    const root = parse('3m / 2m');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Number,
+                        value: 1.5,
+                    });
+                });
+                it('12h / 0h', () => {
+                    // Arrange
+                    const root = parse('12h / 0h');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
                 });
             });
         });
