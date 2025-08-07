@@ -4,6 +4,7 @@ import { expressionAtom } from '@src/entities/expression';
 import { analyzeCode, HighlightedError, parse, PositionalError } from '@src/parser';
 
 export const astParsingErrorAtom = atom<HighlightedError | null>(null, 'astParsingErrorAtom');
+export const evaluationErrorAtom = atom<HighlightedError | null>(null, 'evaluationErrorAtom');
 
 export const tokensAtom = atom((ctx) => {
     const expression = ctx.spy(expressionAtom);
@@ -51,26 +52,49 @@ export const evaluateAtom = atom((ctx) => {
         return null;
     }
     try {
-        return ast?.evaluate();
-    } catch (_) {
+        const result = ast.evaluate();
+
+        evaluationErrorAtom(ctx, null);
+
+        return {
+            ...result,
+            expression: ctx.spy(expressionAtom),
+        };
+    } catch (error) {
+        if (error instanceof HighlightedError) {
+            evaluationErrorAtom(ctx, error);
+            console.error(error);
+            return null;
+        }
         return null;
     }
 }, 'evaluationAtom');
 
 let lastResult: string = '';
 
-export const resultAtom = atom((ctx) => {
+export interface ResultAtom {
+    result: string;
+    invalidExpression: boolean;
+    runtimeError: string;
+}
+
+export const resultAtom = atom<ResultAtom>((ctx) => {
     const evaluation = ctx.spy(evaluateAtom);
+    const astParsingError = ctx.spy(astParsingErrorAtom);
+    const evaluationError = ctx.spy(evaluationErrorAtom);
+
     if (evaluation === null) {
         return {
             result: lastResult,
-            error: true,
+            invalidExpression: !!astParsingError,
+            runtimeError: evaluationError ? evaluationError.originalMessage : '',
         };
     }
 
     lastResult = evaluation.value.toString();
     return {
         result: lastResult,
-        error: false,
+        invalidExpression: false,
+        runtimeError: '',
     };
 }, 'resultAtom');

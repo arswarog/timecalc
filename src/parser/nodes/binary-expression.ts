@@ -22,21 +22,19 @@ export class BinaryExpressionNode extends AbstractNode {
         const leftValue = this.left.evaluate();
         const rightValue = this.right.evaluate();
 
-        if (leftValue.type !== rightValue.type) {
-            throw new Error(
-                `Cannot evaluate binary expression with different types: ${leftValue.type} and ${rightValue.type}`,
-            );
-        }
-
-        if (leftValue.type === ValueType.Number) {
+        try {
             return evaluateNumberExpression(
                 leftValue as NumberValue,
                 this.operator,
                 rightValue as NumberValue,
             );
-        }
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new PositionalError(error, this);
+            }
 
-        throw new Error(`Unsupported value type: ${leftValue.type}`);
+            throw new PositionalError('Unknown error', this.operator);
+        }
     }
 }
 
@@ -45,6 +43,15 @@ function evaluateNumberExpression(
     operator: Token,
     right: NumberValue,
 ): NumberValue {
+    if (left.type !== right.type) {
+        throw new Error(
+            `Cannot evaluate binary expression with different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
+        );
+    }
+
+    if (left.type !== ValueType.Number) {
+        throw new Error(`Unsupported value type for binary expression: ${ValueType[left.type]}`);
+    }
     switch (operator.type) {
         case TokenType.PlusOperation:
             return {
