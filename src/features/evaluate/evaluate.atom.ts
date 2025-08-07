@@ -1,7 +1,9 @@
 import { atom } from '@reatom/framework';
 
 import { expressionAtom } from '@src/entities/expression';
-import { analyzeCode, HighlightedError, parse, PositionalError } from '@src/parser';
+import { analyzeCode, HighlightedError, parse, PositionalError, ValueType } from '@src/parser';
+
+import { timeValueToText } from './time-value-to-text';
 
 export const astParsingErrorAtom = atom<HighlightedError | null>(null, 'astParsingErrorAtom');
 export const evaluationErrorAtom = atom<HighlightedError | null>(null, 'evaluationErrorAtom');
@@ -70,7 +72,7 @@ export const evaluateAtom = atom((ctx) => {
     }
 }, 'evaluationAtom');
 
-let lastResult: string = '';
+let lastOutput: string = '';
 
 export interface ResultAtom {
     result: string;
@@ -85,15 +87,21 @@ export const resultAtom = atom<ResultAtom>((ctx) => {
 
     if (evaluation === null) {
         return {
-            result: lastResult,
+            result: lastOutput,
             invalidExpression: !!astParsingError,
             runtimeError: evaluationError ? evaluationError.originalMessage : '',
         };
     }
 
-    lastResult = evaluation.value.toString();
+    let output = evaluation.value.toString();
+
+    if (evaluation.type === ValueType.Time) {
+        output = timeValueToText(evaluation.value);
+    }
+
+    lastOutput = output;
     return {
-        result: lastResult,
+        result: lastOutput,
         invalidExpression: false,
         runtimeError: '',
     };

@@ -12,6 +12,7 @@ export interface IScreenProps {
 
 export function ScreenComponent({ data, onChange }: IScreenProps) {
     const { code, result, invalidExpression, runtimeError } = data;
+
     return (
         <div className={b()}>
             <input
