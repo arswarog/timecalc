@@ -1,5 +1,6 @@
 export enum ValueType {
     Number,
+    Time,
 }
 
 interface BaseValue {
@@ -12,4 +13,10 @@ export interface NumberValue extends BaseValue {
     value: number;
 }
 
-export type Value = NumberValue;
+export interface TimeValue extends BaseValue {
+    type: ValueType.Time;
+    // Время в секундах
+    value: number;
+}
+
+export type Value = NumberValue | TimeValue;

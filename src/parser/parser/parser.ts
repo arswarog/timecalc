@@ -82,13 +82,24 @@ function parseBinaryExpression(
 function parseValue(ctx: ParserContext): BinaryExpressionNode | ValueNode {
     const value = ctx.getCurrentToken();
 
-    if (value.type === TokenType.NumericLiteral) {
-        ctx.next();
-
-        return new ValueNode(value);
+    if (value.type !== TokenType.NumericLiteral) {
+        throw new PositionalError(`Expected value, got "${value.text}"`, value);
     }
 
-    throw new PositionalError(`Expected value, got "${value.text}"`, ctx.getCurrentToken());
+    ctx.next();
+
+    const unit = ctx.getCurrentToken();
+
+    if (
+        [TokenType.SecondLiteral, TokenType.MinuteLiteral, TokenType.HourLiteral].includes(
+            unit.type,
+        )
+    ) {
+        ctx.next();
+        return new ValueNode(value, unit);
+    } else {
+        return new ValueNode(value);
+    }
 }
 
 function getPrecedence(operator: Token): number {
