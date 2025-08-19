@@ -66,6 +66,56 @@ describe('Evaluate', () => {
                     });
                 });
             });
+            describe('number - time', () => {
+                it('12 - 3s', () => {
+                    // Arrange
+                    const root = parse('12 - 3s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow(
+                        'Нельзя вычитать время из числа или число из времени',
+                    );
+                });
+            });
+            describe('time - number', () => {
+                it('3m - 12', () => {
+                    // Arrange
+                    const root = parse('3m - 12');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow(
+                        'Нельзя вычитать время из числа или число из времени',
+                    );
+                });
+            });
+            describe('time - time', () => {
+                it('3m - 2m', () => {
+                    // Arrange
+                    const root = parse('3m - 2m');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 60, // 1 minute
+                    });
+                });
+                it('12h - 0h', () => {
+                    // Arrange
+                    const root = parse('12h - 0h');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 43200, // 12 hours in seconds
+                    });
+                });
+            });
         });
         describe('умножение', () => {
             describe('number * number', () => {

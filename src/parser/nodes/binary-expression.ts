@@ -63,14 +63,12 @@ function plusOperation(left: Value, right: Value): Value {
 }
 
 function minusOperation(left: Value, right: Value): Value {
-    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
-        throw new Error(
-            `Cannot subtract values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
-        );
+    if (left.type !== right.type) {
+        throw new Error('Нельзя вычитать время из числа или число из времени');
     }
 
     return {
-        type: ValueType.Number,
+        type: left.type,
         value: left.value - right.value,
     };
 }
