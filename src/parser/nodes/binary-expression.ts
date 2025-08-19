@@ -50,14 +50,12 @@ export class BinaryExpressionNode extends AbstractNode {
 }
 
 function plusOperation(left: Value, right: Value): Value {
-    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
-        throw new Error(
-            `Cannot add values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
-        );
+    if (left.type !== right.type) {
+        throw new Error('Нельзя складывать число и время');
     }
 
     return {
-        type: ValueType.Number,
+        type: left.type,
         value: left.value + right.value,
     };
 }

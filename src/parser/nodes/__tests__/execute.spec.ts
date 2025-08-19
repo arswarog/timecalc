@@ -36,6 +36,52 @@ describe('Evaluate', () => {
                     });
                 });
             });
+            describe('number + time', () => {
+                it('12 + 3s', () => {
+                    // Arrange
+                    const root = parse('12 + 3s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя складывать число и время');
+                });
+            });
+            describe('time + number', () => {
+                it('3m + 12', () => {
+                    // Arrange
+                    const root = parse('3m + 12');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя складывать число и время');
+                });
+            });
+            describe('time + time', () => {
+                it('3m + 2m', () => {
+                    // Arrange
+                    const root = parse('3m + 2m');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 300, // 5 minutes in seconds
+                    });
+                });
+                it('12h + 0h', () => {
+                    // Arrange
+                    const root = parse('12h + 0h');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 43200, // 12 hours in seconds
+                    });
+                });
+            });
         });
         describe('вычитание', () => {
             describe('number - number', () => {
