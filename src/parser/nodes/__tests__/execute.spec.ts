@@ -96,6 +96,71 @@ describe('Evaluate', () => {
                     });
                 });
             });
+            describe('number * time', () => {
+                it('12 * 3s', () => {
+                    // Arrange
+                    const root = parse('12 * 3s');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 36, // 36 seconds
+                    });
+                });
+                it('12 * 0s', () => {
+                    // Arrange
+                    const root = parse('12 * 0s');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 0, // 0 seconds
+                    });
+                });
+            });
+            describe('time * number', () => {
+                it('3m * 12', () => {
+                    // Arrange
+                    const root = parse('3m * 12');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 2160, // 36 minutes
+                    });
+                });
+                it('0s * 12', () => {
+                    // Arrange
+                    const root = parse('0s * 12');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 0, // 0 seconds
+                    });
+                });
+            });
+            describe('time * time', () => {
+                it('3m * 2m', () => {
+                    // Arrange
+                    const root = parse('3m * 2m');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя умножать время на время');
+                });
+            });
         });
         describe('деление', () => {
             describe('number / number', () => {

@@ -76,14 +76,16 @@ function minusOperation(left: Value, right: Value): Value {
 }
 
 function multiplyOperation(left: Value, right: Value): Value {
-    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
-        throw new Error(
-            `Cannot multiply values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
-        );
+    if (left.type === ValueType.Time && right.type === ValueType.Time) {
+        // Умножение времени на время не имеет смысла
+        throw new Error('Нельзя умножать время на время');
     }
 
     return {
-        type: ValueType.Number,
+        type:
+            left.type === ValueType.Time || right.type === ValueType.Time
+                ? ValueType.Time
+                : ValueType.Number,
         value: left.value * right.value,
     };
 }
