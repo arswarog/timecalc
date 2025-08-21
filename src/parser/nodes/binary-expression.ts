@@ -50,57 +50,71 @@ export class BinaryExpressionNode extends AbstractNode {
 }
 
 function plusOperation(left: Value, right: Value): Value {
-    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
-        throw new Error(
-            `Cannot add values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
-        );
+    if (left.type !== right.type) {
+        throw new Error('Нельзя складывать число и время');
     }
 
     return {
-        type: ValueType.Number,
+        type: left.type,
         value: left.value + right.value,
     };
 }
 
 function minusOperation(left: Value, right: Value): Value {
-    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
-        throw new Error(
-            `Cannot subtract values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
-        );
+    if (left.type !== right.type) {
+        throw new Error('Нельзя вычитать время из числа или число из времени');
     }
 
     return {
-        type: ValueType.Number,
+        type: left.type,
         value: left.value - right.value,
     };
 }
 
 function multiplyOperation(left: Value, right: Value): Value {
-    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
-        throw new Error(
-            `Cannot multiply values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
-        );
+    if (left.type === ValueType.Time && right.type === ValueType.Time) {
+        // Умножение времени на время не имеет смысла
+        throw new Error('Нельзя умножать время на время');
     }
 
     return {
-        type: ValueType.Number,
+        type:
+            left.type === ValueType.Time || right.type === ValueType.Time
+                ? ValueType.Time
+                : ValueType.Number,
         value: left.value * right.value,
     };
 }
 
 function divideOperation(left: Value, right: Value): Value {
-    if (left.type !== ValueType.Number || right.type !== ValueType.Number) {
-        throw new Error(
-            `Cannot divide values of different types: ${ValueType[left.type]} and ${ValueType[right.type]}`,
-        );
-    }
-
     if (right.value === 0) {
-        throw new Error('Деление на ноль');
+        throw new Error('Деление на ноль недопустимо');
     }
 
-    return {
-        type: ValueType.Number,
-        value: left.value / right.value,
-    };
+    if (left.type === ValueType.Number) {
+        if (right.type === ValueType.Number) {
+            // Оба значения - числа, просто делим
+            return {
+                type: ValueType.Number,
+                value: left.value / right.value,
+            };
+        } else {
+            // Делить число на время нельзя
+            throw new Error('Нельзя делить число на время');
+        }
+    } else {
+        if (right.type === ValueType.Number) {
+            // Делим время на число, результат будет временем
+            return {
+                type: ValueType.Time,
+                value: left.value / right.value,
+            };
+        } else {
+            // Делим время на время, результат будет число
+            return {
+                type: ValueType.Number,
+                value: left.value / right.value,
+            };
+        }
+    }
 }

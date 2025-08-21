@@ -36,6 +36,52 @@ describe('Evaluate', () => {
                     });
                 });
             });
+            describe('number + time', () => {
+                it('12 + 3s', () => {
+                    // Arrange
+                    const root = parse('12 + 3s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя складывать число и время');
+                });
+            });
+            describe('time + number', () => {
+                it('3m + 12', () => {
+                    // Arrange
+                    const root = parse('3m + 12');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя складывать число и время');
+                });
+            });
+            describe('time + time', () => {
+                it('3m + 2m', () => {
+                    // Arrange
+                    const root = parse('3m + 2m');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 300, // 5 minutes in seconds
+                    });
+                });
+                it('12h + 0h', () => {
+                    // Arrange
+                    const root = parse('12h + 0h');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 43200, // 12 hours in seconds
+                    });
+                });
+            });
         });
         describe('вычитание', () => {
             describe('number - number', () => {
@@ -63,6 +109,56 @@ describe('Evaluate', () => {
                     expect(result).toEqual({
                         type: ValueType.Number,
                         value: -23,
+                    });
+                });
+            });
+            describe('number - time', () => {
+                it('12 - 3s', () => {
+                    // Arrange
+                    const root = parse('12 - 3s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow(
+                        'Нельзя вычитать время из числа или число из времени',
+                    );
+                });
+            });
+            describe('time - number', () => {
+                it('3m - 12', () => {
+                    // Arrange
+                    const root = parse('3m - 12');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow(
+                        'Нельзя вычитать время из числа или число из времени',
+                    );
+                });
+            });
+            describe('time - time', () => {
+                it('3m - 2m', () => {
+                    // Arrange
+                    const root = parse('3m - 2m');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 60, // 1 minute
+                    });
+                });
+                it('12h - 0h', () => {
+                    // Arrange
+                    const root = parse('12h - 0h');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 43200, // 12 hours in seconds
                     });
                 });
             });
@@ -96,6 +192,71 @@ describe('Evaluate', () => {
                     });
                 });
             });
+            describe('number * time', () => {
+                it('12 * 3s', () => {
+                    // Arrange
+                    const root = parse('12 * 3s');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 36, // 36 seconds
+                    });
+                });
+                it('12 * 0s', () => {
+                    // Arrange
+                    const root = parse('12 * 0s');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 0, // 0 seconds
+                    });
+                });
+            });
+            describe('time * number', () => {
+                it('3m * 12', () => {
+                    // Arrange
+                    const root = parse('3m * 12');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 2160, // 36 minutes
+                    });
+                });
+                it('0s * 12', () => {
+                    // Arrange
+                    const root = parse('0s * 12');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 0, // 0 seconds
+                    });
+                });
+            });
+            describe('time * time', () => {
+                it('3m * 2m', () => {
+                    // Arrange
+                    const root = parse('3m * 2m');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя умножать время на время');
+                });
+            });
         });
         describe('деление', () => {
             describe('number / number', () => {
@@ -117,7 +278,67 @@ describe('Evaluate', () => {
                     const root = parse('12 / 0');
 
                     // Act & Assert
-                    expect(() => root.evaluate()).toThrow('Деление на ноль');
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
+                });
+            });
+            describe('number / time', () => {
+                it('12 / 3s', () => {
+                    // Arrange
+                    const root = parse('12 / 3s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Нельзя делить число на время');
+                });
+                it('12 / 0s', () => {
+                    // Arrange
+                    const root = parse('12 / 0s');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
+                });
+            });
+            describe('time / number', () => {
+                it('3m / 12', () => {
+                    // Arrange
+                    const root = parse('3m / 12');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: 15, // 15 seconds
+                    });
+                });
+                it('10h / 0', () => {
+                    // Arrange
+                    const root = parse('10h / 0');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
+                });
+            });
+            describe('time / time', () => {
+                it('3m / 2m', () => {
+                    // Arrange
+                    const root = parse('3m / 2m');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Number,
+                        value: 1.5,
+                    });
+                });
+                it('12h / 0h', () => {
+                    // Arrange
+                    const root = parse('12h / 0h');
+
+                    // Act & Assert
+                    expect(() => root.evaluate()).toThrow('Деление на ноль недопустимо');
                 });
             });
         });
