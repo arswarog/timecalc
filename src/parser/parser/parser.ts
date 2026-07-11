@@ -22,7 +22,7 @@ export function parseTokens(tokens: Token[], source: string): RootNode {
 
     const ctx = createContext(tokens);
 
-    const root = new RootNode(parseBracketedExpression(ctx), source);
+    const root = new RootNode(parseBinaryExpression(ctx), source);
 
     if (!ctx.isEnd()) {
         throw new PositionalError(

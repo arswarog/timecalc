@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { HighlightedError, PositionalError } from '../../common';
 import { createToken, TokenType } from '../../lexer';
-import { BinaryExpressionNode, BracketedExpressionNode, RootNode, ValueNode, ValueType } from '../../nodes';
+import {
+    BinaryExpressionNode,
+    BracketedExpressionNode,
+    RootNode,
+    ValueNode,
+    ValueType,
+} from '../../nodes';
 import { parse } from '../parser';
 
 describe('Parser', () => {
@@ -325,6 +331,33 @@ describe('Parser', () => {
                         new ValueNode(createToken(TokenType.NumericLiteral, '12', 1)),
                         createToken(TokenType.OpeningBracket, '(', 0),
                         createToken(TokenType.ClosingBracket, ')', 3),
+                    ),
+                    source,
+                ),
+            );
+        });
+        it('brackets expression as a first operand', () => {
+            // Arrange
+            const source = ' ( 1 + 1 ) × 5';
+
+            // Act
+            const ast = parse(source);
+
+            // Assert
+            expect(ast).toEqual(
+                new RootNode(
+                    new BinaryExpressionNode(
+                        createToken(TokenType.MultiplyOperation, '×', 11),
+                        new BracketedExpressionNode(
+                            new BinaryExpressionNode(
+                                createToken(TokenType.PlusOperation, '+', 5),
+                                new ValueNode(createToken(TokenType.NumericLiteral, '1', 3)),
+                                new ValueNode(createToken(TokenType.NumericLiteral, '1', 7)),
+                            ),
+                            createToken(TokenType.OpeningBracket, '(', 1),
+                            createToken(TokenType.ClosingBracket, ')', 9),
+                        ),
+                        new ValueNode(createToken(TokenType.NumericLiteral, '5', 13)),
                     ),
                     source,
                 ),
