@@ -17,6 +17,11 @@ export const tokenDeclarations: TokenDeclaration[] = [
         chars: '0123456789',
     },
     {
+        type: TokenType.Dot,
+        chars: '.',
+        single: true,
+    },
+    {
         type: TokenType.PlusOperation,
         chars: '+',
         single: true,
