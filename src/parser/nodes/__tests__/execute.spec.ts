@@ -18,6 +18,58 @@ describe('Evaluate', () => {
                 value: 12,
             });
         });
+        it('42.0', () => {
+            // Arrange
+            const root = parse('42.0');
+
+            // Act
+            const result = root.evaluate();
+
+            // Assert
+            expect(result).toEqual({
+                type: ValueType.Number,
+                value: 42,
+            });
+        });
+        it('36.6', () => {
+            // Arrange
+            const root = parse('36.6');
+
+            // Act
+            const result = root.evaluate();
+
+            // Assert
+            expect(result).toEqual({
+                type: ValueType.Number,
+                value: 36.6,
+            });
+        });
+        it('9.', () => {
+            // Arrange
+            const root = parse('9.');
+
+            // Act
+            const result = root.evaluate();
+
+            // Assert
+            expect(result).toEqual({
+                type: ValueType.Number,
+                value: 9,
+            });
+        });
+        it('.3', () => {
+            // Arrange
+            const root = parse('.3');
+
+            // Act
+            const result = root.evaluate();
+
+            // Assert
+            expect(result).toEqual({
+                type: ValueType.Number,
+                value: 0.3,
+            });
+        });
     });
     describe('операции', () => {
         describe('сложение', () => {

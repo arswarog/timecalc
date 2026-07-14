@@ -14,13 +14,21 @@ export class ValueNode extends AbstractNode {
     public readonly type = NodeType.Value;
     public readonly value: Value;
 
-    constructor(valueToken: Token, unitToken?: Token) {
+    constructor(valueTokens: Token[], unitToken?: Token) {
         super();
 
-        const value = parseInt(valueToken.text);
+        const firstToken = valueTokens[0];
+        const lastToken = valueTokens[valueTokens.length - 1];
+        let text = valueTokens.map((token) => token.text).join('');
+
+        if (text.startsWith('.')) {
+            text = '0' + text;
+        }
+
+        const value = parseFloat(text);
 
         if (!Number.isFinite(value)) {
-            throw new PositionalError(`Invalid number "${valueToken.text}"`, valueToken);
+            throw new PositionalError(`Invalid number "${text}"`, firstToken);
         }
 
         if (unitToken) {
@@ -35,16 +43,16 @@ export class ValueNode extends AbstractNode {
                 value: value * unit,
             };
 
-            this.start = valueToken.start;
+            this.start = firstToken.start;
             this.end = unitToken.end;
         } else {
             this.value = {
                 type: ValueType.Number,
-                value: parseInt(valueToken.text),
+                value,
             };
 
-            this.start = valueToken.start;
-            this.end = valueToken.end;
+            this.start = firstToken.start;
+            this.end = lastToken.end;
         }
     }
 
