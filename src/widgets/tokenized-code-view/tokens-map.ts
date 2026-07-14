@@ -6,6 +6,7 @@ export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.EndOfFile]: SyntaxTheme.Regular,
     [TokenType.Space]: SyntaxTheme.Regular,
     [TokenType.NumericLiteral]: SyntaxTheme.Number,
+    [TokenType.Dot]: SyntaxTheme.Number,
     [TokenType.PlusOperation]: SyntaxTheme.Regular,
     [TokenType.MinusOperation]: SyntaxTheme.Regular,
     [TokenType.MultiplyOperation]: SyntaxTheme.Regular,
