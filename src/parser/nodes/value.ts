@@ -14,12 +14,13 @@ export class ValueNode extends AbstractNode {
     public readonly type = NodeType.Value;
     public readonly value: Value;
 
-    constructor(valueTokens: Token[], unitToken?: Token) {
+    constructor(tokens: Token[]) {
         super();
 
-        const firstToken = valueTokens[0];
-        const lastToken = valueTokens[valueTokens.length - 1];
-        let text = valueTokens.map((token) => token.text).join('');
+        const firstToken = tokens[0];
+        const lastToken = tokens[tokens.length - 1];
+
+        let text = tokens.map((token) => token.text).join('');
 
         if (text.startsWith('.')) {
             text = '0' + text;

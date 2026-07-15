@@ -142,5 +142,30 @@ describe('Parser / Value', () => {
                 });
             });
         });
+        describe('multiple values', () => {
+            it('3h 47m', () => {
+                // Arrange
+                const source = '3h 47m';
+
+                // Act
+                const ast = parse(source);
+                const result = ast.evaluate();
+
+                // Assert
+                expect(ast).toEqual(
+                    new RootNode(
+                        new ValueNode(
+                            [createToken(TokenType.NumericLiteral, '3', 0)],
+                            createToken(TokenType.HourLiteral, 'h', 1),
+                        ),
+                        source,
+                    ),
+                );
+                expect(result).toEqual({
+                    type: ValueType.Time,
+                    value: 10800,
+                });
+            });
+        });
     });
 });
