@@ -13,4 +13,6 @@ export const tokensMap: { [key in TokenType]: SyntaxThemeItem } = {
     [TokenType.HourLiteral]: SyntaxTheme.Method,
     [TokenType.MinuteLiteral]: SyntaxTheme.Method,
     [TokenType.SecondLiteral]: SyntaxTheme.Method,
+    [TokenType.OpeningBracket]: SyntaxTheme.Regular,
+    [TokenType.ClosingBracket]: SyntaxTheme.Regular,
 };

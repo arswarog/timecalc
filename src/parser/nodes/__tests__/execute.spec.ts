@@ -358,4 +358,17 @@ describe('Evaluate', () => {
             });
         });
     });
+    it('2*(2+2)', () => {
+        // Arrange
+        const root = parse('2*(2+2)');
+
+        // Act
+        const result = root.evaluate();
+
+        // Assert
+        expect(result).toEqual({
+            type: ValueType.Number,
+            value: 8,
+        });
+    });
 });
