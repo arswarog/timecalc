@@ -8,10 +8,18 @@ export function timeValueToText(timeValue: number): string {
         timeValue = -timeValue;
     }
 
-    const mseconds = Math.floor((timeValue % 1) * 1000);
-    const seconds = Math.floor(timeValue % 60);
-    const minutes = Math.floor(timeValue / 60) % 60;
-    const hours = Math.floor(timeValue / 3600);
+    timeValue = Math.round(timeValue * 1000);
+
+    const mseconds = timeValue % 1000;
+    timeValue = Math.floor(timeValue / 1000);
+
+    const seconds = timeValue % 60;
+    timeValue = Math.floor(timeValue / 60);
+
+    const minutes = timeValue % 60;
+    timeValue = Math.floor(timeValue / 60);
+
+    const hours = timeValue;
 
     const parts: string[] = [];
 
