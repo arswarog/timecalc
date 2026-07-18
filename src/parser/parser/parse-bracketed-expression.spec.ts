@@ -18,12 +18,12 @@ describe('Parser / BracketedExpression', () => {
             new RootNode(
                 new BinaryExpressionNode(
                     createToken(TokenType.MultiplyOperation, '×', 1),
-                    new ValueNode(createToken(TokenType.NumericLiteral, '5', 0)),
+                    new ValueNode([createToken(TokenType.NumericLiteral, '5', 0)]),
                     new BracketedExpressionNode(
                         new BinaryExpressionNode(
                             createToken(TokenType.PlusOperation, '+', 7),
-                            new ValueNode(createToken(TokenType.NumericLiteral, '12', 5)),
-                            new ValueNode(createToken(TokenType.NumericLiteral, '34', 8)),
+                            new ValueNode([createToken(TokenType.NumericLiteral, '12', 5)]),
+                            new ValueNode([createToken(TokenType.NumericLiteral, '34', 8)]),
                         ),
                         createToken(TokenType.OpeningBracket, '(', 3),
                         createToken(TokenType.ClosingBracket, ')', 10),
@@ -46,12 +46,12 @@ describe('Parser / BracketedExpression', () => {
                 new BracketedExpressionNode(
                     new BinaryExpressionNode(
                         createToken(TokenType.PlusOperation, '+', 4),
-                        new ValueNode(createToken(TokenType.NumericLiteral, '12', 2)),
+                        new ValueNode([createToken(TokenType.NumericLiteral, '12', 2)]),
                         new BracketedExpressionNode(
                             new BinaryExpressionNode(
                                 createToken(TokenType.MultiplyOperation, '×', 8),
-                                new ValueNode(createToken(TokenType.NumericLiteral, '34', 6)),
-                                new ValueNode(createToken(TokenType.NumericLiteral, '5', 9)),
+                                new ValueNode([createToken(TokenType.NumericLiteral, '34', 6)]),
+                                new ValueNode([createToken(TokenType.NumericLiteral, '5', 9)]),
                             ),
                             createToken(TokenType.OpeningBracket, '(', 5),
                             createToken(TokenType.ClosingBracket, ')', 11),
@@ -76,7 +76,7 @@ describe('Parser / BracketedExpression', () => {
         expect(ast).toEqual(
             new RootNode(
                 new BracketedExpressionNode(
-                    new ValueNode(createToken(TokenType.NumericLiteral, '12', 1)),
+                    new ValueNode([createToken(TokenType.NumericLiteral, '12', 1)]),
                     createToken(TokenType.OpeningBracket, '(', 0),
                     createToken(TokenType.ClosingBracket, ')', 3),
                 ),
@@ -99,13 +99,13 @@ describe('Parser / BracketedExpression', () => {
                     new BracketedExpressionNode(
                         new BinaryExpressionNode(
                             createToken(TokenType.PlusOperation, '+', 5),
-                            new ValueNode(createToken(TokenType.NumericLiteral, '1', 3)),
-                            new ValueNode(createToken(TokenType.NumericLiteral, '1', 7)),
+                            new ValueNode([createToken(TokenType.NumericLiteral, '1', 3)]),
+                            new ValueNode([createToken(TokenType.NumericLiteral, '1', 7)]),
                         ),
                         createToken(TokenType.OpeningBracket, '(', 1),
                         createToken(TokenType.ClosingBracket, ')', 9),
                     ),
-                    new ValueNode(createToken(TokenType.NumericLiteral, '5', 13)),
+                    new ValueNode([createToken(TokenType.NumericLiteral, '5', 13)]),
                 ),
                 source,
             ),

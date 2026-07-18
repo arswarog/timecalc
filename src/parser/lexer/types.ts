@@ -5,6 +5,7 @@ export enum TokenType {
     EndOfFile = 0,
     Space,
     NumericLiteral,
+    Dot,
     PlusOperation,
     MinusOperation,
     MultiplyOperation,
