@@ -1,5 +1,5 @@
 import { PositionalError } from '../common';
-import { TokenType } from '../lexer';
+import { Token, TokenType } from '../lexer';
 import { ValueNode } from '../nodes';
 
 import { ParserContext } from './context';
@@ -7,13 +7,37 @@ import { Parser } from './parser.type.ts';
 
 export function createParseValue(_parser: Parser) {
     return (ctx: ParserContext): ValueNode => {
-        const value = ctx.getCurrentToken();
+        let token = ctx.getCurrentToken();
 
-        if (value.type !== TokenType.NumericLiteral) {
-            throw new PositionalError(`Expected value, got "${value.text}"`, value);
+        if (token.type !== TokenType.NumericLiteral && token.type !== TokenType.Dot) {
+            throw new PositionalError(`Expected value, got "${token.text}"`, token);
         }
 
-        ctx.next();
+        let beforeDot: Token | undefined = undefined;
+        let dot: Token | undefined = undefined;
+        let afterDot: Token | undefined = undefined;
+
+        if (token.type === TokenType.NumericLiteral) {
+            beforeDot = token;
+
+            ctx.next();
+            token = ctx.getCurrentToken();
+        }
+
+        if (token.type === TokenType.Dot) {
+            dot = token;
+
+            ctx.next();
+            token = ctx.getCurrentToken();
+        }
+
+        if (token.type === TokenType.NumericLiteral) {
+            afterDot = token;
+
+            ctx.next();
+        }
+
+        const tokens = [beforeDot, dot, afterDot].filter((token): token is Token => !!token);
 
         const unit = ctx.getCurrentToken();
 
@@ -23,9 +47,9 @@ export function createParseValue(_parser: Parser) {
             )
         ) {
             ctx.next();
-            return new ValueNode(value, unit);
+            return new ValueNode(tokens, unit);
         } else {
-            return new ValueNode(value);
+            return new ValueNode(tokens);
         }
     };
 }
