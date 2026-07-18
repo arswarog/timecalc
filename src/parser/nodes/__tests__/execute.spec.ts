@@ -161,6 +161,19 @@ describe('Evaluate', () => {
                         value: 43200, // 12 hours in seconds
                     });
                 });
+                it('1m - 120s', () => {
+                    // Arrange
+                    const root = parse('1m - 120s');
+
+                    // Act
+                    const result = root.evaluate();
+
+                    // Assert
+                    expect(result).toEqual({
+                        type: ValueType.Time,
+                        value: -60,
+                    });
+                });
             });
         });
         describe('умножение', () => {
