@@ -7,12 +7,11 @@ import { Parser } from './parser.type.ts';
 
 export function createParseBracketedExpression(parser: Parser) {
     return (ctx: ParserContext): BracketedExpressionNode | BinaryExpressionNode | ValueNode => {
-        if (ctx.getCurrentToken().type === TokenType.Space) {
-            ctx.next();
-        }
-
         if (ctx.getCurrentToken().type !== TokenType.OpeningBracket) {
-            return parser.binaryExpression(ctx);
+            throw new PositionalError(
+                `Expected opening bracket, got "${ctx.getCurrentToken().text}"`,
+                ctx.getCurrentToken(),
+            );
         }
 
         const openingBracket = ctx.getCurrentToken();

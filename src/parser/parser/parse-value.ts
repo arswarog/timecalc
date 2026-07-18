@@ -1,12 +1,12 @@
 import { PositionalError } from '../common';
 import { TokenType } from '../lexer';
-import { BinaryExpressionNode, ValueNode } from '../nodes';
+import { ValueNode } from '../nodes';
 
 import { ParserContext } from './context';
 import { Parser } from './parser.type.ts';
 
 export function createParseValue(_parser: Parser) {
-    return (ctx: ParserContext): BinaryExpressionNode | ValueNode => {
+    return (ctx: ParserContext): ValueNode => {
         const value = ctx.getCurrentToken();
 
         if (value.type !== TokenType.NumericLiteral) {

@@ -1,9 +1,6 @@
-import {
-    BinaryExpressionNode,
-    BracketedExpressionNode,
-    ParserContext,
-    ValueNode,
-} from '@src/parser';
+import { BinaryExpressionNode, BracketedExpressionNode, ValueNode } from '../nodes';
+
+import { ParserContext } from './context';
 
 export interface Parser {
     value(ctx: ParserContext): BinaryExpressionNode | ValueNode;

@@ -3,10 +3,23 @@ export function timeValueToText(timeValue: number): string {
         return '0 секунд';
     }
 
-    const mseconds = Math.floor((timeValue % 1) * 1000);
-    const seconds = Math.floor(timeValue % 60);
-    const minutes = Math.floor(timeValue / 60) % 60;
-    const hours = Math.floor(timeValue / 3600);
+    const negativeValue = timeValue < 0;
+    if (negativeValue) {
+        timeValue = -timeValue;
+    }
+
+    timeValue = Math.round(timeValue * 1000);
+
+    const mseconds = timeValue % 1000;
+    timeValue = Math.floor(timeValue / 1000);
+
+    const seconds = timeValue % 60;
+    timeValue = Math.floor(timeValue / 60);
+
+    const minutes = timeValue % 60;
+    timeValue = Math.floor(timeValue / 60);
+
+    const hours = timeValue;
 
     const parts: string[] = [];
 
@@ -23,5 +36,5 @@ export function timeValueToText(timeValue: number): string {
         parts.push(`${mseconds}мс`);
     }
 
-    return parts.join(' ');
+    return (negativeValue ? '-' : '') + parts.join(' ');
 }

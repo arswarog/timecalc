@@ -4,9 +4,6 @@ import { Token, TokenType } from '../lexer';
 import { AbstractNode, NodeType } from './abstract';
 import { Value, ValueType } from './value.type';
 
-/**
- * Список констант для единиц измерения времени.
- */
 const unitMap: Partial<Record<TokenType, number>> = {
     [TokenType.SecondLiteral]: 1,
     [TokenType.MinuteLiteral]: 60,
