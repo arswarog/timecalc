@@ -28,29 +28,21 @@ function parseNumericValue(ctx: ParserContext): ValueNode {
 function parseSingleValue(ctx: ParserContext): ValueNode {
     const numericValue = parseNumericValue(ctx);
 
-    const unitToken = ctx.getCurrentToken();
-
-    if (unitToken.type === TokenType.HourLiteral) {
-        ctx.next();
-
+    if (ctx.getCurrentTokenIfTypeAndNext(TokenType.HourLiteral)) {
         return new ValueNode({
             hours: numericValue,
             additional: [ctx.getCurrentToken()],
         });
     }
 
-    if (unitToken.type === TokenType.MinuteLiteral) {
-        ctx.next();
-
+    if (ctx.getCurrentTokenIfTypeAndNext(TokenType.MinuteLiteral)) {
         return new ValueNode({
             minutes: numericValue,
             additional: [ctx.getCurrentToken()],
         });
     }
 
-    if (unitToken.type === TokenType.SecondLiteral) {
-        ctx.next();
-
+    if (ctx.getCurrentTokenIfTypeAndNext(TokenType.SecondLiteral)) {
         return new ValueNode({
             seconds: numericValue,
             additional: [ctx.getCurrentToken()],
