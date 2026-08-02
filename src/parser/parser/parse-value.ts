@@ -7,45 +7,55 @@ import { Parser } from './parser.type.ts';
 
 export function createParseValue(_parser: Parser) {
     return (ctx: ParserContext): ValueNode => {
-        const valueToken = ctx.getCurrentToken();
+        return parseSingleValue(ctx);
+    };
+}
 
-        if (valueToken.type !== TokenType.NumericLiteral) {
-            throw new PositionalError(`Expected value, got "${valueToken.text}"`, valueToken);
-        }
+function parseNumericValue(ctx: ParserContext): ValueNode {
+    const valueToken = ctx.getCurrentToken();
 
+    if (valueToken.type !== TokenType.NumericLiteral) {
+        throw new PositionalError(`Expected value, got "${valueToken.text}"`, valueToken);
+    }
+
+    ctx.next();
+
+    return new ValueNode({
+        integer: valueToken,
+    });
+}
+
+function parseSingleValue(ctx: ParserContext): ValueNode {
+    const numericValue = parseNumericValue(ctx);
+
+    const unitToken = ctx.getCurrentToken();
+
+    if (unitToken.type === TokenType.HourLiteral) {
         ctx.next();
 
-        const unitToken = ctx.getCurrentToken();
+        return new ValueNode({
+            hours: numericValue,
+            additional: [ctx.getCurrentToken()],
+        });
+    }
 
-        if (unitToken.type === TokenType.HourLiteral) {
-            ctx.next();
-
-            return new ValueNode({
-                hours: valueToken,
-                additional: [ctx.getCurrentToken()],
-            });
-        }
-
-        if (unitToken.type === TokenType.MinuteLiteral) {
-            ctx.next();
-
-            return new ValueNode({
-                minutes: valueToken,
-                additional: [ctx.getCurrentToken()],
-            });
-        }
-
-        if (unitToken.type === TokenType.SecondLiteral) {
-            ctx.next();
-
-            return new ValueNode({
-                seconds: valueToken,
-                additional: [ctx.getCurrentToken()],
-            });
-        }
+    if (unitToken.type === TokenType.MinuteLiteral) {
+        ctx.next();
 
         return new ValueNode({
-            integer: valueToken,
+            minutes: numericValue,
+            additional: [ctx.getCurrentToken()],
         });
-    };
+    }
+
+    if (unitToken.type === TokenType.SecondLiteral) {
+        ctx.next();
+
+        return new ValueNode({
+            seconds: numericValue,
+            additional: [ctx.getCurrentToken()],
+        });
+    }
+
+    return numericValue;
 }

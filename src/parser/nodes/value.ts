@@ -13,10 +13,10 @@ interface NumberValue {
 }
 
 interface TimeValue {
-    hours?: Token;
-    minutes?: Token;
-    seconds?: Token;
-    milliseconds?: Token;
+    hours?: Token | ValueNode;
+    minutes?: Token | ValueNode;
+    seconds?: Token | ValueNode;
+    milliseconds?: Token | ValueNode;
     additional?: (Token | undefined)[];
 }
 
@@ -82,10 +82,22 @@ export class ValueNode extends AbstractNode {
             );
 
             try {
-                const hours = parseNumberString(tokens.hours?.text || '0');
-                const minutes = parseNumberString(tokens.minutes?.text || '0');
-                const seconds = parseNumberString(tokens.seconds?.text || '0');
-                const milliseconds = parseNumberString(`0.${tokens.milliseconds?.text || '0'}`);
+                const hours =
+                    tokens.hours instanceof ValueNode
+                        ? tokens.hours.value.value
+                        : parseNumberString(tokens.hours?.text || '0');
+                const minutes =
+                    tokens.minutes instanceof ValueNode
+                        ? tokens.minutes.value.value
+                        : parseNumberString(tokens.minutes?.text || '0');
+                const seconds =
+                    tokens.seconds instanceof ValueNode
+                        ? tokens.seconds.value.value
+                        : parseNumberString(tokens.seconds?.text || '0');
+                const milliseconds =
+                    tokens.milliseconds instanceof ValueNode
+                        ? tokens.milliseconds.value.value
+                        : parseNumberString(`0.${tokens.milliseconds?.text || '0'}`);
 
                 value = hours * 3600 + minutes * 60 + seconds + milliseconds;
 

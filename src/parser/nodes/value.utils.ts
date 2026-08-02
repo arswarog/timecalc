@@ -1,4 +1,4 @@
-import { Token } from '@src/parser';
+import { Positionable } from '@src/parser';
 
 export function parseNumberString(str: string): number {
     const value = parseFloat(str);
@@ -11,9 +11,9 @@ export function parseNumberString(str: string): number {
 }
 
 export function getPositionFromTokens(
-    ...tokens: (Token | undefined)[]
+    ...tokens: (Positionable | undefined)[]
 ): [start: number, end: number] {
-    const validTokens = tokens.filter((item): item is Token => !!item);
+    const validTokens = tokens.filter((item): item is Positionable => !!item);
 
     if (!validTokens.length) {
         throw new Error(`Invalid tokens []`);
