@@ -7,25 +7,42 @@ import { Parser } from './parser.type.ts';
 
 export function createParseValue(_parser: Parser) {
     return (ctx: ParserContext): ValueNode => {
-        const value = ctx.getCurrentToken();
+        const valueToken = ctx.getCurrentToken();
 
-        if (value.type !== TokenType.NumericLiteral) {
-            throw new PositionalError(`Expected value, got "${value.text}"`, value);
+        if (valueToken.type !== TokenType.NumericLiteral) {
+            throw new PositionalError(`Expected value, got "${valueToken.text}"`, valueToken);
         }
 
         ctx.next();
 
-        const unit = ctx.getCurrentToken();
+        const unitToken = ctx.getCurrentToken();
 
-        if (
-            [TokenType.SecondLiteral, TokenType.MinuteLiteral, TokenType.HourLiteral].includes(
-                unit.type,
-            )
-        ) {
+        if (unitToken.type === TokenType.HourLiteral) {
             ctx.next();
-            return new ValueNode(value, unit);
-        } else {
-            return new ValueNode(value);
+
+            return new ValueNode({
+                hours: valueToken,
+            });
         }
+
+        if (unitToken.type === TokenType.MinuteLiteral) {
+            ctx.next();
+
+            return new ValueNode({
+                minutes: valueToken,
+            });
+        }
+
+        if (unitToken.type === TokenType.SecondLiteral) {
+            ctx.next();
+
+            return new ValueNode({
+                seconds: valueToken,
+            });
+        }
+
+        return new ValueNode({
+            integer: valueToken,
+        });
     };
 }

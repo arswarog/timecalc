@@ -16,7 +16,12 @@ describe('Parser / Value', () => {
 
             // Assert
             expect(ast).toEqual(
-                new RootNode(new ValueNode(createToken(TokenType.NumericLiteral, '12', 0)), source),
+                new RootNode(
+                    new ValueNode({
+                        integer: createToken(TokenType.NumericLiteral, '12', 0),
+                    }),
+                    source,
+                ),
             );
         });
     });
@@ -33,10 +38,9 @@ describe('Parser / Value', () => {
                 // Assert
                 expect(ast).toEqual(
                     new RootNode(
-                        new ValueNode(
-                            createToken(TokenType.NumericLiteral, '23', 0),
-                            createToken(TokenType.SecondLiteral, 's', 2),
-                        ),
+                        new ValueNode({
+                            seconds: createToken(TokenType.NumericLiteral, '23', 0),
+                        }),
                         source,
                     ),
                 );
@@ -56,10 +60,9 @@ describe('Parser / Value', () => {
                 // Assert
                 expect(ast).toEqual(
                     new RootNode(
-                        new ValueNode(
-                            createToken(TokenType.NumericLiteral, '2', 0),
-                            createToken(TokenType.MinuteLiteral, 'm', 1),
-                        ),
+                        new ValueNode({
+                            minutes: createToken(TokenType.NumericLiteral, '2', 0),
+                        }),
                         source,
                     ),
                 );
@@ -79,10 +82,9 @@ describe('Parser / Value', () => {
                 // Assert
                 expect(ast).toEqual(
                     new RootNode(
-                        new ValueNode(
-                            createToken(TokenType.NumericLiteral, '3', 0),
-                            createToken(TokenType.HourLiteral, 'h', 1),
-                        ),
+                        new ValueNode({
+                            hours: createToken(TokenType.NumericLiteral, '3', 0),
+                        }),
                         source,
                     ),
                 );
