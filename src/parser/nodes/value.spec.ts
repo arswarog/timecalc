@@ -63,6 +63,7 @@ describe('Nodes / Value', () => {
         it('hours', () => {
             const node = new ValueNode({
                 hours: createToken(TokenType.NumericLiteral, '12', 0),
+                additional: [createToken(TokenType.HourLiteral, 'h', 2)],
             });
 
             expect(node.value).toEqual({
@@ -71,12 +72,13 @@ describe('Nodes / Value', () => {
             });
             expect(node).toMatchObject({
                 start: 0,
-                end: 2,
+                end: 3,
             });
         });
         it('minutes', () => {
             const node = new ValueNode({
                 minutes: createToken(TokenType.NumericLiteral, '47', 0),
+                additional: [createToken(TokenType.HourLiteral, 'm', 2)],
             });
 
             expect(node.value).toEqual({
@@ -85,12 +87,13 @@ describe('Nodes / Value', () => {
             });
             expect(node).toMatchObject({
                 start: 0,
-                end: 2,
+                end: 3,
             });
         });
         it('seconds', () => {
             const node = new ValueNode({
                 seconds: createToken(TokenType.NumericLiteral, '72', 0),
+                additional: [createToken(TokenType.HourLiteral, 's', 2)],
             });
 
             expect(node.value).toEqual({
@@ -99,12 +102,13 @@ describe('Nodes / Value', () => {
             });
             expect(node).toMatchObject({
                 start: 0,
-                end: 2,
+                end: 3,
             });
         });
         it('milliseconds', () => {
             const node = new ValueNode({
-                milliseconds: createToken(TokenType.NumericLiteral, '07', 0),
+                seconds: createToken(TokenType.NumericLiteral, '0', 0),
+                milliseconds: createToken(TokenType.NumericLiteral, '07', 2),
             });
 
             expect(node.value).toEqual({
@@ -113,7 +117,7 @@ describe('Nodes / Value', () => {
             });
             expect(node).toMatchObject({
                 start: 0,
-                end: 2,
+                end: 4,
             });
         });
         it('complex', () => {

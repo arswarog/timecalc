@@ -22,6 +22,7 @@ export function createParseValue(_parser: Parser) {
 
             return new ValueNode({
                 hours: valueToken,
+                additional: [ctx.getCurrentToken()],
             });
         }
 
@@ -30,6 +31,7 @@ export function createParseValue(_parser: Parser) {
 
             return new ValueNode({
                 minutes: valueToken,
+                additional: [ctx.getCurrentToken()],
             });
         }
 
@@ -38,6 +40,7 @@ export function createParseValue(_parser: Parser) {
 
             return new ValueNode({
                 seconds: valueToken,
+                additional: [ctx.getCurrentToken()],
             });
         }
 

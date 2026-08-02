@@ -40,6 +40,7 @@ describe('Parser / Value', () => {
                     new RootNode(
                         new ValueNode({
                             seconds: createToken(TokenType.NumericLiteral, '23', 0),
+                            additional: [createToken(TokenType.SecondLiteral, 's', 2)],
                         }),
                         source,
                     ),
@@ -62,6 +63,7 @@ describe('Parser / Value', () => {
                     new RootNode(
                         new ValueNode({
                             minutes: createToken(TokenType.NumericLiteral, '2', 0),
+                            additional: [createToken(TokenType.MinuteLiteral, 'm', 1)],
                         }),
                         source,
                     ),
@@ -84,6 +86,7 @@ describe('Parser / Value', () => {
                     new RootNode(
                         new ValueNode({
                             hours: createToken(TokenType.NumericLiteral, '3', 0),
+                            additional: [createToken(TokenType.HourLiteral, 'h', 1)],
                         }),
                         source,
                     ),

@@ -9,6 +9,7 @@ import { Value, ValueType } from './value.type';
 interface NumberValue {
     integer: Token;
     fractional?: Token;
+    additional?: (Token | undefined)[];
 }
 
 interface TimeValue {
@@ -16,6 +17,7 @@ interface TimeValue {
     minutes?: Token;
     seconds?: Token;
     milliseconds?: Token;
+    additional?: (Token | undefined)[];
 }
 
 export class ValueNode extends AbstractNode {
@@ -27,12 +29,18 @@ export class ValueNode extends AbstractNode {
     constructor(tokens: NumberValue | TimeValue) {
         super();
 
+        const additionalTokens = tokens.additional || [];
+
         if (isNumberValue(tokens)) {
             if (!tokens.integer) {
                 throw new Error('Value must have a integer part');
             }
 
-            [this.start, this.end] = getPositionFromTokens(tokens.integer, tokens.fractional);
+            [this.start, this.end] = getPositionFromTokens(
+                tokens.integer,
+                tokens.fractional,
+                ...additionalTokens,
+            );
 
             let stringValue = tokens.integer.text;
 
@@ -70,6 +78,7 @@ export class ValueNode extends AbstractNode {
                 tokens.minutes,
                 tokens.seconds,
                 tokens.milliseconds,
+                ...additionalTokens,
             );
 
             try {
