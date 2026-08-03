@@ -129,15 +129,11 @@ export class ValueNode extends AbstractNode {
 }
 
 function isNumberValue(tokens: NumberValue | TimeValue): tokens is NumberValue {
-    return ('integer' in tokens || 'fractional' in tokens) && !isTimeValue(tokens);
+    return 'integer' in tokens || 'fractional' in tokens;
 }
 
 function isTimeValue(tokens: NumberValue | TimeValue): tokens is TimeValue {
     return (
-        ('hours' in tokens ||
-            'minutes' in tokens ||
-            'seconds' in tokens ||
-            'milliseconds' in tokens) &&
-        !isNumberValue(tokens)
+        'hours' in tokens || 'minutes' in tokens || 'seconds' in tokens || 'milliseconds' in tokens
     );
 }
