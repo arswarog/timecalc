@@ -31,21 +31,21 @@ function parseSingleValue(ctx: ParserContext): ValueNode {
     if (ctx.getCurrentTokenIfTypeAndNext(TokenType.HourLiteral)) {
         return new ValueNode({
             hours: numericValue,
-            additional: [ctx.getCurrentToken()],
+            additional: [ctx.getNext(-1)],
         });
     }
 
     if (ctx.getCurrentTokenIfTypeAndNext(TokenType.MinuteLiteral)) {
         return new ValueNode({
             minutes: numericValue,
-            additional: [ctx.getCurrentToken()],
+            additional: [ctx.getNext(-1)],
         });
     }
 
     if (ctx.getCurrentTokenIfTypeAndNext(TokenType.SecondLiteral)) {
         return new ValueNode({
             seconds: numericValue,
-            additional: [ctx.getCurrentToken()],
+            additional: [ctx.getNext(-1)],
         });
     }
 
