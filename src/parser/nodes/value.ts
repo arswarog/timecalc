@@ -33,7 +33,7 @@ export class ValueNode extends AbstractNode {
 
         if (isNumberValue(tokens)) {
             if (!tokens.integer) {
-                throw new Error('Value must have a integer part');
+                throw new Error('Value must have an integer part');
             }
 
             [this.start, this.end] = getPositionFromTokens(
@@ -71,8 +71,6 @@ export class ValueNode extends AbstractNode {
         }
 
         if (isTimeValue(tokens)) {
-            let value = 0;
-
             [this.start, this.end] = getPositionFromTokens(
                 tokens.hours,
                 tokens.minutes,
@@ -99,7 +97,7 @@ export class ValueNode extends AbstractNode {
                         ? tokens.milliseconds.value.value
                         : parseNumberString(`0.${tokens.milliseconds?.text || '0'}`);
 
-                value = hours * 3600 + minutes * 60 + seconds + milliseconds;
+                const value = hours * 3600 + minutes * 60 + seconds + milliseconds;
 
                 this.value = {
                     type: ValueType.Time,
