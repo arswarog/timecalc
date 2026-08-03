@@ -72,7 +72,9 @@ describe('Parser', () => {
                                 integer: createToken(TokenType.NumericLiteral, '12', 0),
                             }),
                             new ValueNode({
-                                integer: createToken(TokenType.NumericLiteral, '5.0', 3),
+                                integer: createToken(TokenType.NumericLiteral, '5', 3),
+                                fractional: createToken(TokenType.NumericLiteral, '0', 5),
+                                additional: [createToken(TokenType.Dot, '.', 4)],
                             }),
                         ),
                         new ValueNode({
@@ -107,6 +109,7 @@ describe('Parser', () => {
                         new ValueNode({
                             integer: createToken(TokenType.NumericLiteral, '34', 5),
                             fractional: createToken(TokenType.NumericLiteral, '6', 8),
+                            additional: [createToken(TokenType.Dot, '.', 7)],
                         }),
                     ),
                     source,

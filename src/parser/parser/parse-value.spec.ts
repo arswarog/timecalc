@@ -24,6 +24,14 @@ describe('Parser / Value', () => {
                     source,
                 ),
             );
+            expect(ast.expression).toMatchObject({
+                start: 0,
+                end: 2,
+            });
+            expect(ast.evaluate()).toEqual({
+                type: ValueType.Number,
+                value: 12,
+            });
         });
         it('3.14', () => {
             // Arrange
@@ -38,10 +46,19 @@ describe('Parser / Value', () => {
                     new ValueNode({
                         integer: createToken(TokenType.NumericLiteral, '3', 0),
                         fractional: createToken(TokenType.NumericLiteral, '14', 2),
+                        additional: [createToken(TokenType.Dot, '.', 1)],
                     }),
                     source,
                 ),
             );
+            expect(ast.expression).toMatchObject({
+                start: 0,
+                end: 4,
+            });
+            expect(ast.evaluate()).toEqual({
+                type: ValueType.Number,
+                value: 3.14,
+            });
         });
         it('42.', () => {
             // Arrange
@@ -64,16 +81,34 @@ describe('Parser / Value', () => {
                 start: 0,
                 end: 3,
             });
+            expect(ast.evaluate()).toEqual({
+                type: ValueType.Number,
+                value: 42,
+            });
         });
         it('789.0', () => {
             // Arrange
-            const root = parse('789.0');
+            const source = '789.0';
 
             // Act
-            const result = root.evaluate();
+            const ast = parse('789.0');
 
             // Assert
-            expect(result).toEqual({
+            expect(ast).toEqual(
+                new RootNode(
+                    new ValueNode({
+                        integer: createToken(TokenType.NumericLiteral, '789', 0),
+                        fractional: createToken(TokenType.NumericLiteral, '0', 4),
+                        additional: [createToken(TokenType.Dot, '.', 3)],
+                    }),
+                    source,
+                ),
+            );
+            expect(ast.expression).toMatchObject({
+                start: 0,
+                end: 5,
+            });
+            expect(ast.evaluate()).toEqual({
                 type: ValueType.Number,
                 value: 789,
             });
@@ -132,7 +167,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -144,7 +178,11 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 3,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 23,
                 });
@@ -155,7 +193,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -170,7 +207,11 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 6,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 23.12,
                 });
@@ -181,7 +222,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -193,7 +233,11 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 2,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 120,
                 });
@@ -204,7 +248,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -216,7 +259,11 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 2,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 10800,
                 });
@@ -227,7 +274,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -242,7 +288,11 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 4,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 12960,
                 });
