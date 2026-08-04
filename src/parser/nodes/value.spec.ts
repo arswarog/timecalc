@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { createToken, TokenType, ValueType } from '@src/parser';
+import { createToken, TokenType } from '../lexer';
 
 import { ValueNode } from './value';
+import { ValueType } from './value.type';
 
 describe('Nodes / Value', () => {
     describe('number', () => {
