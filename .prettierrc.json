@@ -15,6 +15,15 @@
             "options": {
                 "printWidth": 10
             }
+        },
+        {
+            "files": [
+                "*.md",
+                "*.mdx"
+            ],
+            "options": {
+                "proseWrap": "always"
+            }
         }
     ]
 }

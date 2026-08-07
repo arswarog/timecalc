@@ -9,8 +9,8 @@
         "build": "tsc -b && vite build",
         "lint:check": "eslint .",
         "lint": "eslint --fix .",
-        "prettier:check": "prettier --check .",
-        "prettier": "prettier --write .",
+        "format:check": "prettier --check .",
+        "format": "prettier --write .",
         "lint:staged": "lint-staged",
         "preview": "vite preview",
         "test": "vitest"
@@ -56,7 +56,7 @@
         "typescript": "~5.5.4"
     },
     "lint-staged": {
-        "*.{json,ts,tsx,js,jsx,js,mjs,scss}": "prettier --write",
+        "*.{json,ts,tsx,js,jsx,js,mjs,scss,md,mdx}": "prettier --write",
         "{src,e2e}/**/*.{ts,tsx}": "eslint --quiet --fix"
     }
 }
