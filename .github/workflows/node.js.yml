@@ -33,11 +33,16 @@ jobs:
             - name: Install dependencies
               run: yarn
 
-            - name: Run the tests
+            - name: Test
               run: yarn test
 
             - name: Build
               run: yarn build
+
+            - name: Lint
+              run: |
+                  yarn lint:check
+                  yarn prettier:check
 
             - name: Deploy
               uses: JamesIves/github-pages-deploy-action@v4
