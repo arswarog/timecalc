@@ -3,6 +3,7 @@ import { Token, TokenType } from '../lexer';
 
 export interface ParserContext {
     index: number;
+    currentToken: Token;
     getCurrentToken(): Token;
     getCurrentTokenIfTypeAndNext(type: TokenType): Token | undefined;
     getCurrentTokenOrDie(type: TokenType, errorMessage: string): Token;
@@ -50,6 +51,9 @@ export function createContext(tokens: Token[]): ParserContext {
     return {
         get index() {
             return index;
+        },
+        get currentToken() {
+            return getCurrentToken();
         },
         getCurrentToken,
         getCurrentTokenIfTypeAndNext(type: TokenType): Token | undefined {
