@@ -18,6 +18,19 @@ describe('Lexer', () => {
                     createToken(TokenType.NumericLiteral, '1234567890', 0),
                 ]);
             });
+            it('дробные числа', () => {
+                expect(analyzeCode('1.123')).toEqual([
+                    createToken(TokenType.NumericLiteral, '1', 0),
+                    createToken(TokenType.Dot, '.', 1),
+                    createToken(TokenType.NumericLiteral, '123', 2),
+                ]);
+            });
+            it('дробные числа без дробной части', () => {
+                expect(analyzeCode('10.')).toEqual([
+                    createToken(TokenType.NumericLiteral, '10', 0),
+                    createToken(TokenType.Dot, '.', 2),
+                ]);
+            });
         });
         describe('UnknownSymbol', () => {
             it('1 char', () => {

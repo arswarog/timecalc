@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { HighlightedError, PositionalError } from '../common';
 import { createToken, TokenType } from '../lexer';
 import { RootNode, ValueNode, ValueType } from '../nodes';
 
@@ -23,6 +24,139 @@ describe('Parser / Value', () => {
                     source,
                 ),
             );
+            expect(ast.expression).toMatchObject({
+                start: 0,
+                end: 2,
+            });
+            expect(ast.evaluate()).toEqual({
+                type: ValueType.Number,
+                value: 12,
+            });
+        });
+        it('3.14', () => {
+            // Arrange
+            const source = '3.14';
+
+            // Act
+            const ast = parse(source);
+
+            // Assert
+            expect(ast).toEqual(
+                new RootNode(
+                    new ValueNode({
+                        integer: createToken(TokenType.NumericLiteral, '3', 0),
+                        fractional: createToken(TokenType.NumericLiteral, '14', 2),
+                        additional: [createToken(TokenType.Dot, '.', 1)],
+                    }),
+                    source,
+                ),
+            );
+            expect(ast.expression).toMatchObject({
+                start: 0,
+                end: 4,
+            });
+            expect(ast.evaluate()).toEqual({
+                type: ValueType.Number,
+                value: 3.14,
+            });
+        });
+        it('42.', () => {
+            // Arrange
+            const source = '42.';
+
+            // Act
+            const ast = parse(source);
+
+            // Assert
+            expect(ast).toEqual(
+                new RootNode(
+                    new ValueNode({
+                        integer: createToken(TokenType.NumericLiteral, '42', 0),
+                        additional: [createToken(TokenType.Dot, '.', 2)],
+                    }),
+                    source,
+                ),
+            );
+            expect(ast.expression).toMatchObject({
+                start: 0,
+                end: 3,
+            });
+            expect(ast.evaluate()).toEqual({
+                type: ValueType.Number,
+                value: 42,
+            });
+        });
+        it('789.0', () => {
+            // Arrange
+            const source = '789.0';
+
+            // Act
+            const ast = parse('789.0');
+
+            // Assert
+            expect(ast).toEqual(
+                new RootNode(
+                    new ValueNode({
+                        integer: createToken(TokenType.NumericLiteral, '789', 0),
+                        fractional: createToken(TokenType.NumericLiteral, '0', 4),
+                        additional: [createToken(TokenType.Dot, '.', 3)],
+                    }),
+                    source,
+                ),
+            );
+            expect(ast.expression).toMatchObject({
+                start: 0,
+                end: 5,
+            });
+            expect(ast.evaluate()).toEqual({
+                type: ValueType.Number,
+                value: 789,
+            });
+        });
+        it('failed: лишние точки в дробном числе с целой частью', () => {
+            // Arrange
+            const source = '12.0.0';
+
+            // Act & Assert
+            expect(() => parse(source)).toThrowError(
+                new HighlightedError(
+                    new PositionalError('Unexpected token "." (Dot)', {
+                        start: 4,
+                        end: 4,
+                    }),
+                    source,
+                ),
+            );
+        });
+        it('failed: лишние точки в дробном числе', () => {
+            // Arrange
+            const source = '0..';
+
+            // Act & Assert
+            expect(() => parse(source)).toThrowError(
+                new HighlightedError(
+                    new PositionalError('Unexpected token "." (Dot)', {
+                        start: 2,
+                        end: 2,
+                    }),
+                    source,
+                ),
+            );
+        });
+        it('failed: первая точка', () => {
+            // Arrange
+            const source = '.0';
+
+            // Act & Assert
+            expect(() => parse(source)).toThrowError(
+                new HighlightedError(
+                    new PositionalError('Expected value\nExpected token NumericLiteral, got Dot', {
+                        start: 0,
+                        end: 1,
+                    }),
+                    source,
+                ),
+            );
         });
     });
     describe('time', () => {
@@ -33,7 +167,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -45,9 +178,42 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 3,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 23,
+                });
+            });
+            it('23.12s', () => {
+                // Arrange
+                const source = '23.12s';
+
+                // Act
+                const ast = parse(source);
+
+                // Assert
+                expect(ast).toEqual(
+                    new RootNode(
+                        new ValueNode({
+                            seconds: new ValueNode({
+                                integer: createToken(TokenType.NumericLiteral, '23', 0),
+                                fractional: createToken(TokenType.NumericLiteral, '12', 3),
+                            }),
+                            additional: [createToken(TokenType.SecondLiteral, 's', 5)],
+                        }),
+                        source,
+                    ),
+                );
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 6,
+                });
+                expect(ast.evaluate()).toEqual({
+                    type: ValueType.Time,
+                    value: 23.12,
                 });
             });
             it('2m', () => {
@@ -56,7 +222,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -68,7 +233,11 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 2,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 120,
                 });
@@ -79,7 +248,6 @@ describe('Parser / Value', () => {
 
                 // Act
                 const ast = parse(source);
-                const result = ast.evaluate();
 
                 // Assert
                 expect(ast).toEqual(
@@ -91,9 +259,42 @@ describe('Parser / Value', () => {
                         source,
                     ),
                 );
-                expect(result).toEqual({
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 2,
+                });
+                expect(ast.evaluate()).toEqual({
                     type: ValueType.Time,
                     value: 10800,
+                });
+            });
+            it('3.6h', () => {
+                // Arrange
+                const source = '3.6h';
+
+                // Act
+                const ast = parse(source);
+
+                // Assert
+                expect(ast).toEqual(
+                    new RootNode(
+                        new ValueNode({
+                            hours: new ValueNode({
+                                integer: createToken(TokenType.NumericLiteral, '3', 0),
+                                fractional: createToken(TokenType.NumericLiteral, '6', 2),
+                            }),
+                            additional: [createToken(TokenType.HourLiteral, 'h', 3)],
+                        }),
+                        source,
+                    ),
+                );
+                expect(ast.expression).toMatchObject({
+                    start: 0,
+                    end: 4,
+                });
+                expect(ast.evaluate()).toEqual({
+                    type: ValueType.Time,
+                    value: 12960,
                 });
             });
         });

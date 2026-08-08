@@ -1,5 +1,4 @@
-import { PositionalError } from '../common';
-import { TokenType } from '../lexer';
+import { Token, TokenType } from '../lexer';
 import { ValueNode } from '../nodes';
 
 import { ParserContext } from './context';
@@ -12,16 +11,17 @@ export function createParseValue(_parser: Parser) {
 }
 
 function parseNumericValue(ctx: ParserContext): ValueNode {
-    const valueToken = ctx.getCurrentToken();
-
-    if (valueToken.type !== TokenType.NumericLiteral) {
-        throw new PositionalError(`Expected value, got "${valueToken.text}"`, valueToken);
-    }
+    const beforeDot = ctx.getCurrentTokenOrDie(TokenType.NumericLiteral, 'Expected value');
 
     ctx.next();
+    const dot = ctx.getCurrentTokenIfTypeAndNext(TokenType.Dot);
+    const afterDot: Token | undefined =
+        dot && ctx.getCurrentTokenIfTypeAndNext(TokenType.NumericLiteral);
 
     return new ValueNode({
-        integer: valueToken,
+        integer: beforeDot,
+        fractional: afterDot,
+        additional: [dot],
     });
 }
 

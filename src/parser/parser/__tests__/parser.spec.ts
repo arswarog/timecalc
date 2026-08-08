@@ -30,9 +30,9 @@ describe('Parser', () => {
                 ),
             );
         });
-        it('12-5+34', () => {
+        it('12+0.', () => {
             // Arrange
-            const source = '12-5+34';
+            const source = '12+0.';
 
             // Act
             const ast = parse(source);
@@ -41,7 +41,31 @@ describe('Parser', () => {
             expect(ast).toEqual(
                 new RootNode(
                     new BinaryExpressionNode(
-                        createToken(TokenType.PlusOperation, '+', 4),
+                        createToken(TokenType.PlusOperation, '+', 2),
+                        new ValueNode({
+                            integer: createToken(TokenType.NumericLiteral, '12', 0),
+                        }),
+                        new ValueNode({
+                            integer: createToken(TokenType.NumericLiteral, '0', 3),
+                            additional: [createToken(TokenType.Dot, '.', 4)],
+                        }),
+                    ),
+                    source,
+                ),
+            );
+        });
+        it('12-5.0+34', () => {
+            // Arrange
+            const source = '12-5.0+34';
+
+            // Act
+            const ast = parse(source);
+
+            // Assert
+            expect(ast).toEqual(
+                new RootNode(
+                    new BinaryExpressionNode(
+                        createToken(TokenType.PlusOperation, '+', 6),
                         new BinaryExpressionNode(
                             createToken(TokenType.MinusOperation, '-', 2),
                             new ValueNode({
@@ -49,19 +73,21 @@ describe('Parser', () => {
                             }),
                             new ValueNode({
                                 integer: createToken(TokenType.NumericLiteral, '5', 3),
+                                fractional: createToken(TokenType.NumericLiteral, '0', 5),
+                                additional: [createToken(TokenType.Dot, '.', 4)],
                             }),
                         ),
                         new ValueNode({
-                            integer: createToken(TokenType.NumericLiteral, '34', 5),
+                            integer: createToken(TokenType.NumericLiteral, '34', 7),
                         }),
                     ),
                     source,
                 ),
             );
         });
-        it('12×5+34', () => {
+        it('12×5+34.6', () => {
             // Arrange
-            const source = '12×5+34';
+            const source = '12×5+34.6';
 
             // Act
             const ast = parse(source);
@@ -82,6 +108,8 @@ describe('Parser', () => {
                         ),
                         new ValueNode({
                             integer: createToken(TokenType.NumericLiteral, '34', 5),
+                            fractional: createToken(TokenType.NumericLiteral, '6', 8),
+                            additional: [createToken(TokenType.Dot, '.', 7)],
                         }),
                     ),
                     source,
@@ -124,10 +152,13 @@ describe('Parser', () => {
             // Act & Assert
             expect(() => parse(source)).toThrowError(
                 new HighlightedError(
-                    new PositionalError('Expected value, got "x"', {
-                        start: 6,
-                        end: 7,
-                    }),
+                    new PositionalError(
+                        'Expected value\n' + 'Expected token NumericLiteral, got UnknownSymbol',
+                        {
+                            start: 6,
+                            end: 7,
+                        },
+                    ),
                     source,
                 ),
             );
@@ -154,10 +185,13 @@ describe('Parser', () => {
             // Act & Assert
             expect(() => parse(source)).toThrowError(
                 new HighlightedError(
-                    new PositionalError('Expected value, got "[EOF]"', {
-                        start: 6,
-                        end: 6,
-                    }),
+                    new PositionalError(
+                        'Expected value\n' + 'Expected token NumericLiteral, got EndOfFile',
+                        {
+                            start: 6,
+                            end: 6,
+                        },
+                    ),
                     source,
                 ),
             );

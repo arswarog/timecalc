@@ -110,6 +110,7 @@ describe('Nodes / Value', () => {
             const node = new ValueNode({
                 seconds: createToken(TokenType.NumericLiteral, '0', 0),
                 milliseconds: createToken(TokenType.NumericLiteral, '07', 2),
+                additional: [createToken(TokenType.Dot, '.', 1)],
             });
 
             expect(node.value).toEqual({
